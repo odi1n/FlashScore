@@ -52,7 +52,9 @@
   <ItemGroup>
     <Compile Include="Addition\Parsing.cs" />
     <Compile Include="Addition\Request.cs" />
+    <Compile Include="Exception\ErrorNearestMatches.cs" />
     <Compile Include="Exception\ErrorMatchesNull.cs" />
+    <Compile Include="Models\NearestMatchesModels.cs" />
     <Compile Include="Models\MatchInfoModels.cs" />
     <Compile Include="MyScore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

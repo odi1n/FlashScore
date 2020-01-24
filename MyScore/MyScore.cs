@@ -45,7 +45,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="minutes">Минуты, матчи которые получим в ближайшие 60(по умолчанию) минут</param>
         /// <returns></returns>
-        public List<MatchInfoModels> NearestMatchesMinutes(int minutes = 60)
+        public  List<MatchInfoModels> NearestMatchesMinutes( int minutes = 60)
         {
             if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
             return MatchesToday.Where(x => x.DateStart.Value.AddMinutes(minutes) > DateTime.Now).ToList();
@@ -59,8 +59,22 @@ namespace MyScoreMatch
         public List<MatchInfoModels> NearestMatchesHours(int hours = 1)
         {
             if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
-            return MatchesToday.Where(x => x.DateStart.Value.AddHours(hours) > DateTime.Now).ToList();
+            var tts = MatchesToday.Where(x => x.DateStart > DateTime.Now && x.DateStart < DateTime.Now.AddHours(hours)).ToList();
+            return tts;
         }
+
+        /// <summary>
+        /// Получить матчи в указанном промежутке
+        /// </summary>
+        /// <param name="nearestMatche">Указать часы или минуты</param>
+        /// <returns></returns>
+        public List<MatchInfoModels> NearestMatches(NearestMatchesModels nearestMatche)
+        {
+            if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
+            if ( nearestMatche.Hours > 24 || nearestMatche.Minutes > 1440 ) throw new ErrorNearestMatches("Указано времени больше чем может быть в сутках");
+            return MatchesToday.Where(x => x.DateStart.Value.AddHours(nearestMatche.Hours).AddMinutes(nearestMatche.Minutes) > DateTime.Now).ToList();
+        }
+
 
         //public string GetInfoMatch()
         //{

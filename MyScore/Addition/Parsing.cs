@@ -25,29 +25,42 @@ namespace MyScoreMatch.Action
 
             foreach(var parsing in document.QuerySelectorAll("#main>#score-data") )
             {
-                foreach (var pars in parsing.QuerySelectorAll("span") )
-                {
-                    try
-                    {
-                        mim.Add(new MatchInfoModels() { DateStart = DateTime.Parse(pars.TextContent) });
-                    }
-                    catch ( FormatException )
-                    {
-                        mim.Add(new MatchInfoModels() { DateStart = null });
-                    }
-                }
-
                 foreach ( var pars in parsing.QuerySelectorAll("a") )
                 {
-                    if( mim[number].DateStart != null )
-                        mim[number].Link = "https://www.myscore.com.ua" + pars.GetAttribute("href");
-
-                    number++;
+                    mim.Add(new MatchInfoModels() { Link = "https://www.myscore.com.ua" + pars.GetAttribute("href") });
                 }
 
+                foreach ( var pars in parsing.QuerySelectorAll("span") )
+                {
+                    var timePars = pars.FirstChild.TextContent.Replace("'", "");
+
+                    int? startTime = null;
+                    DateTime? time = null;
+
+                    try { startTime = int.Parse(timePars); } catch ( FormatException e ) { }
+                    try { time = DateTime.Parse(timePars); } catch ( FormatException e ){ }
+
+                    var ttsss = pars.OuterHtml;
+                    var tttsss = ttsss.Contains("canceled");
+
+                    if ( startTime != null || time != null )
+                    {
+                        try
+                        {
+                            //mim[number].DateStart = DateTime.Parse(timePars) : DateTime.Now.AddMinutes(-startTime.Value);
+                            mim[number].DateStart = DateTime.Parse(timePars);
+                        }
+                        catch ( FormatException )
+                        {
+                            mim[number].DateStart = null;
+                        }
+                        number++;
+                    }
+                }
+                //break;
             }
-            mim.RemoveAll(x => x.DateStart == null);
-            return mim.OrderBy(x=>x.DateStart).ToList();
+            //mim.RemoveAll(x => x.DateStart == null);
+            return mim;
         }        
     }
 }

@@ -15,10 +15,14 @@ namespace MyScore_test
             MyScore query = new MyScore();
             var parsing = query.GetMatchesToday();
 
+            Console.Clear();
+
             foreach ( var pars in parsing )
             {
                 Console.WriteLine(pars.Link + " | " + pars.DateStart);
             }
+
+
             Console.ReadKey();
         }
     }
