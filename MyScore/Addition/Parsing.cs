@@ -47,7 +47,7 @@ namespace MyScoreMatch.Action
                     {
                         try
                         {
-                            mim[number].DateStart = time != null ? DateTime.Parse(timePars) : DateTime.Now.AddMinutes(-startTime.Value);
+                            mim[number].DateStart = time != null ? DateTime.Parse(timePars).AddHours(1) : DateTime.Now.AddMinutes(-startTime.Value).AddHours(1);
                             //mim[number].DateStart = DateTime.Parse(timePars);
                         }
                         catch ( FormatException )
@@ -84,7 +84,6 @@ namespace MyScoreMatch.Action
             matchInfo.Country = document.QuerySelector(".description__country").FirstChild.TextContent;
             matchInfo.Liga = document.QuerySelector(".description__country>a").TextContent;
 
-            var tts = document.QuerySelector("#utime").TextContent;
             try
             {
                 matchInfo.DateStart = DateTime.Parse(document.QuerySelector("#utime").TextContent);

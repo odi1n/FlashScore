@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MyScoreMatch.Action;
 using MyScoreMatch;
+using System.IO;
 
 namespace MyScore_test
 {
@@ -12,20 +13,14 @@ namespace MyScore_test
     {
         static void Main(string[] args)
         {
-            MyScore query = new MyScore();
+            MyScore myScore = new MyScore(true);
 
-            var querys = query.NearestMatches(new MyScoreMatch.Models.NearestMatchesModels()
-            {
-                Hours = 1,
-                Minutes = 20,
-            });
-
-            var infoOverUnder = query.GetInfo(querys);
+            var infoOverUnder = myScore.GetInfoAll();
 
             Console.Clear();
 
             string test = "";
-            foreach ( var matches in infoOverUnder )
+            foreach ( var matches in myScore.MatchesToday )
             {
                 test += ("name: " + matches.Name + "\n");
                 test +=("time: " + matches.DateStart + "\n");
@@ -41,6 +36,9 @@ namespace MyScore_test
                 }
                 test += "\n";
             }
+
+            Console.WriteLine(test);
+            File.WriteAllText("test.txt", test);
 
             Console.ReadKey();
         }

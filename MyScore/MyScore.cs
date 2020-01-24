@@ -18,6 +18,10 @@ namespace MyScoreMatch
         /// </summary>
         public List<MatchModels> MatchesToday { get; set; } = new List<MatchModels>();
         /// <summary>
+        /// Получать новые матчи если новый день
+        /// </summary>
+        private bool NewDay { get; set; }
+        /// <summary>
         /// Ключ
         /// </summary>
         private string XFSign { get; set; }
@@ -29,6 +33,16 @@ namespace MyScoreMatch
         public MyScore()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
+            GetMatchesToday();
+            ParsingXFSign();
+        }
+
+        public MyScore(bool newDay)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
+            this.NewDay = newDay;
 
             GetMatchesToday();
             ParsingXFSign();
@@ -47,7 +61,14 @@ namespace MyScoreMatch
             request.AddHeader("Cache-Control", "max-age=0");
             request.AddHeader("Host", "m.myscore.com.ua");
             request.AddHeader("Upgrade-Insecure-Requests", "1");
-            HttpResponse response = request.Get("https://m.myscore.com.ua/");
+
+            HttpResponse response = null;
+            if ( NewDay && DateTime.Now.Hour < 1)
+                 response = request.Get("https://m.myscore.com.ua/" + "/?d=1");
+            else
+                 response = request.Get("https://m.myscore.com.ua/" );
+
+
 
             MatchesToday = Parsing.ParsingMMyScore(response.ToString()).OrderBy(x=>x.DateStart).ToList();
 
@@ -167,7 +188,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="match"></param>
         /// <returns></returns>
-        public bool GetAllInfo()
+        public bool GetInfoAll()
         {
             int i = 0;
             foreach ( var match in MatchesToday )
