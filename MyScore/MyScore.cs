@@ -16,7 +16,7 @@ namespace MyScoreMatch
         /// <summary>
         /// Матчи которые будут сегодня
         /// </summary>
-        public List<MatchInfoModels> MatchesToday { get; set; } = new List<MatchInfoModels>();
+        public List<MatchModels> MatchesToday { get; set; } = new List<MatchModels>();
         /// <summary>
         /// Ключ
         /// </summary>
@@ -30,7 +30,7 @@ namespace MyScoreMatch
         /// Получить матчи с m.myscore.com.ua на сегодня
         /// </summary>
         /// <returns></returns>
-        public List<MatchInfoModels> GetMatchesToday()
+        public List<MatchModels> GetMatchesToday()
         {
             HttpRequest request = _request.httpRequest();
             request.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
@@ -53,7 +53,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="minutes">Минуты, матчи которые получим в ближайшие 60(по умолчанию) минут</param>
         /// <returns></returns>
-        public  List<MatchInfoModels> NearestMatchesMinutes( int minutes = 60)
+        public  List<MatchModels> NearestMatchesMinutes( int minutes = 60)
         {
             if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
             return MatchesToday.Where(x => x.DateStart > DateTime.Now && x.DateStart < DateTime.Now.AddMinutes(minutes)).ToList();
@@ -64,7 +64,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="hours">Часы, матчи которые получим в ближайшие 1(по умолчанию) час</param>
         /// <returns></returns>
-        public List<MatchInfoModels> NearestMatchesHours(int hours = 1)
+        public List<MatchModels> NearestMatchesHours(int hours = 1)
         {
             if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
             return MatchesToday.Where(x =>
@@ -77,7 +77,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="nearestMatche">Указать часы или минуты</param>
         /// <returns></returns>
-        public List<MatchInfoModels> NearestMatches(NearestMatchesModels nearestMatche)
+        public List<MatchModels> NearestMatches(NearestMatchesModels nearestMatche)
         {
             if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
             if ( nearestMatche.Hours > 24 || nearestMatche.Hours < -24||
@@ -110,7 +110,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="match">Матч</param>
         /// <returns></returns>
-        public MatchInfoModels GetInfo(MatchInfoModels match)
+        public MatchModels GetInfo(MatchModels match)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
@@ -135,7 +135,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="match">Список выбранных матчей</param>
         /// <returns></returns>
-        public List<MatchInfoModels> GetInfo(List<MatchInfoModels> matches)
+        public List<MatchModels> GetInfo(List<MatchModels> matches)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int i = 0;
@@ -193,7 +193,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="match"></param>
         /// <returns></returns>
-        private MatchInfoModels GetMatchInfo(MatchInfoModels match)
+        private MatchModels GetMatchInfo(MatchModels match)
         {
             HttpResponse response = null;
             for ( int i = 0; i < 3; i++ )
@@ -212,7 +212,7 @@ namespace MyScoreMatch
                 }
                 catch ( HttpException e ) { }
             }
-            MatchInfoModels mim = Parsing.ParsingMatchInfo(response.ToString()) ;
+            MatchModels mim = Parsing.ParsingMatchInfo(response.ToString()) ;
             return mim;
         }
 
@@ -221,7 +221,7 @@ namespace MyScoreMatch
         /// </summary>
         /// <param name="match">Матч о котором нужно получить информацию</param>
         /// <returns></returns>
-        private Dictionary<double, List<TotalModels>> GetMatchOverUnder(MatchInfoModels match)
+        private Dictionary<double, List<TotalModels>> GetMatchOverUnder(MatchModels match)
         {
             HttpResponse response = null;
             for ( int i = 0; i < 3; i++ )

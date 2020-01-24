@@ -16,9 +16,9 @@ namespace MyScoreMatch.Action
         /// </summary>
         /// <param name="response">строка для парсинга</param>
         /// <returns></returns>
-        public static List<MatchInfoModels> ParsingMMyScore(string response)
+        public static List<MatchModels> ParsingMMyScore(string response)
         {
-            List<MatchInfoModels> mim = new List<MatchInfoModels>();
+            List<MatchModels> mim = new List<MatchModels>();
             int number = 0;
             HtmlParser hp = new HtmlParser();
             var document = hp.Parse(response);
@@ -27,7 +27,7 @@ namespace MyScoreMatch.Action
             {
                 foreach ( var pars in parsing.QuerySelectorAll("a") )
                 {
-                    mim.Add(new MatchInfoModels() { Link = "https://www.myscore.com.ua" + pars.GetAttribute("href") });
+                    mim.Add(new MatchModels() { Link = "https://www.myscore.com.ua" + pars.GetAttribute("href") });
                 }
 
                 foreach ( var pars in parsing.QuerySelectorAll("span") )
@@ -47,8 +47,8 @@ namespace MyScoreMatch.Action
                     {
                         try
                         {
-                            //mim[number].DateStart = DateTime.Parse(timePars) : DateTime.Now.AddMinutes(-startTime.Value);
-                            mim[number].DateStart = DateTime.Parse(timePars);
+                            mim[number].DateStart = time != null ? DateTime.Parse(timePars) : DateTime.Now.AddMinutes(-startTime.Value);
+                            //mim[number].DateStart = DateTime.Parse(timePars);
                         }
                         catch ( FormatException )
                         {
@@ -66,9 +66,9 @@ namespace MyScoreMatch.Action
         /// </summary>
         /// <param name="response">исходный код страницы</param>
         /// <returns></returns>
-        public static MatchInfoModels ParsingMatchInfo(string response)
+        public static MatchModels ParsingMatchInfo(string response)
         {
-            MatchInfoModels matchInfo = new MatchInfoModels();
+            MatchModels matchInfo = new MatchModels();
 
             HtmlParser hp = new HtmlParser();
             var document = hp.Parse(response);
@@ -78,8 +78,8 @@ namespace MyScoreMatch.Action
 
             if ( document.QuerySelectorAll("span.scoreboard").Count() > 0 )
             {
-                matchInfo.Command1.Goal = document.QuerySelectorAll(".scoreboard")[0].TextContent;
-                matchInfo.Command2.Goal = document.QuerySelectorAll(".scoreboard")[1].TextContent;
+                matchInfo.Command1.Goal = int.Parse( document.QuerySelectorAll(".scoreboard")[0].TextContent);
+                matchInfo.Command2.Goal = int.Parse( document.QuerySelectorAll(".scoreboard")[1].TextContent);
             }
             matchInfo.Country = document.QuerySelector(".description__country").FirstChild.TextContent;
             matchInfo.Liga = document.QuerySelector(".description__country>a").TextContent;

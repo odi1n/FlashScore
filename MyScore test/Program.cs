@@ -15,13 +15,18 @@ namespace MyScore_test
             MyScore query = new MyScore();
             var parsing = query.GetMatchesToday();
 
+            var querys = query.NearestMatches(new MyScoreMatch.Models.NearestMatchesModels()
+            {
+                Hours = 1,
+                Minutes = 20,
+            });
 
-            var infoOverUnder = query.GetAllInfo();
+            var infoOverUnder = query.GetInfo(querys);
 
             Console.Clear();
 
             string test = "";
-            foreach ( var matches in query.MatchesToday )
+            foreach ( var matches in infoOverUnder )
             {
                 test += ("name: " + matches.Name + "\n");
                 test +=("time: " + matches.DateStart + "\n");

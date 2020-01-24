@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyScoreMatch.Models
 {
-    public class MatchInfoModels
+    public class MatchModels
     {
         /// <summary>
         /// Ссылка
@@ -38,11 +38,11 @@ namespace MyScoreMatch.Models
         /// <summary>
         /// Команда 1
         /// </summary>
-        public CommandInfoModels Command1 { get; set; } = new CommandInfoModels();
+        public CommandModels Command1 { get; set; } = new CommandModels();
         /// <summary>
         /// Команда 2
         /// </summary>
-        public CommandInfoModels Command2 { get; set; } = new CommandInfoModels();
+        public CommandModels Command2 { get; set; } = new CommandModels();
         /// <summary>
         /// Лига
         /// </summary>
