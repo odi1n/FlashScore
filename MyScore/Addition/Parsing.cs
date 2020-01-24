@@ -57,10 +57,81 @@ namespace MyScoreMatch.Action
                         number++;
                     }
                 }
-                //break;
             }
-            //mim.RemoveAll(x => x.DateStart == null);
             return mim;
         }        
+
+        /// <summary>
+        /// Спарсить информацию о матчей
+        /// </summary>
+        /// <param name="response">исходный код страницы</param>
+        /// <returns></returns>
+        public static MatchInfoModels ParsingMatchInfo(string response)
+        {
+            MatchInfoModels matchInfo = new MatchInfoModels();
+
+            HtmlParser hp = new HtmlParser();
+            var document = hp.Parse(response);
+
+            matchInfo.Command1.Name = document.QuerySelectorAll(".participant-imglink>img")[0].GetAttribute("alt");
+            matchInfo.Command2.Name = document.QuerySelectorAll(".participant-imglink>img")[1].GetAttribute("alt");
+
+            if ( document.QuerySelectorAll("span.scoreboard").Count() > 0 )
+            {
+                matchInfo.Command1.Goal = document.QuerySelectorAll(".scoreboard")[0].TextContent;
+                matchInfo.Command2.Goal = document.QuerySelectorAll(".scoreboard")[1].TextContent;
+            }
+            matchInfo.Country = document.QuerySelector(".description__country").FirstChild.TextContent;
+            matchInfo.Liga = document.QuerySelector(".description__country>a").TextContent;
+
+            var tts = document.QuerySelector("#utime").TextContent;
+            try
+            {
+                matchInfo.DateStart = DateTime.Parse(document.QuerySelector("#utime").TextContent);
+            }
+            catch (FormatException)
+            {
+                matchInfo.DateStart = null;
+            }
+            return matchInfo;
+        }
+
+        /// <summary>
+        /// Спарсить информаию о более/менее
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static Dictionary<double, List<TotalModels>> ParsingMatchOverUnder(string response)
+        {
+            Dictionary<double, List<TotalModels>> bk = new Dictionary<double, List<TotalModels>>();
+
+            HtmlParser hp = new HtmlParser();
+            var document = hp.Parse(response);
+
+            foreach(var doc in document.QuerySelectorAll("#block-under-over-ft>table") )
+            {
+
+                string total = doc.QuerySelectorAll("tbody>tr.odd>td")[1].TextContent;
+                List<TotalModels> totalInfo = new List<TotalModels>();
+                foreach ( var tbody in doc.QuerySelectorAll("tbody>tr") )
+                {
+                    string bkName = tbody.QuerySelector("td.bookmaker>div>a").GetAttribute("title");
+                    string more = tbody.QuerySelectorAll("td")[2].QuerySelector("span").TextContent;
+                    string less = tbody.QuerySelectorAll("td")[3].QuerySelector("span").TextContent;
+
+                    totalInfo.Add(new TotalModels()
+                    {
+                        BkName = bkName,
+                        More = double.Parse(more),
+                        Less = double.Parse(less),
+                    });
+
+                }
+
+                bk.Add(double.Parse( total), totalInfo);
+            }
+
+            return bk;
+        }
     }
 }

@@ -15,12 +15,21 @@ namespace MyScore_test
             MyScore query = new MyScore();
             var parsing = query.GetMatchesToday();
 
+
+            var infoOverUnder = query.GetInfo(query.MatchesToday[5]);
+
             Console.Clear();
 
-            foreach ( var pars in parsing )
+            Console.WriteLine("name: " +infoOverUnder.Name);
+            foreach ( var match in infoOverUnder.Bookmaker )
             {
-                Console.WriteLine(pars.Link + " | " + pars.DateStart);
+                Console.WriteLine("key:"+match.Key  );
+                foreach(var val in match.Value )
+                {
+                    Console.WriteLine("info: " + val.BkName + " | " + val.Less + " | " + val.More );
+                }
             }
+
 
 
             Console.ReadKey();

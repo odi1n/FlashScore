@@ -54,6 +54,8 @@
     <Compile Include="Addition\Request.cs" />
     <Compile Include="Exception\ErrorNearestMatches.cs" />
     <Compile Include="Exception\ErrorMatchesNull.cs" />
+    <Compile Include="Models\TotalModels.cs" />
+    <Compile Include="Models\CommandInfoModels.cs" />
     <Compile Include="Models\NearestMatchesModels.cs" />
     <Compile Include="Models\MatchInfoModels.cs" />
     <Compile Include="MyScore.cs" />
