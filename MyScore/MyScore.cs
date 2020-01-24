@@ -26,6 +26,14 @@ namespace MyScoreMatch
         /// </summary>
         private Request _request = new Request();
 
+        public MyScore()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
+            GetMatchesToday();
+            ParsingXFSign();
+        }
+
         /// <summary>
         /// Получить матчи с m.myscore.com.ua на сегодня
         /// </summary>
@@ -42,8 +50,6 @@ namespace MyScoreMatch
             HttpResponse response = request.Get("https://m.myscore.com.ua/");
 
             MatchesToday = Parsing.ParsingMMyScore(response.ToString()).OrderBy(x=>x.DateStart).ToList();
-
-            ParsingXFSign();
 
             return MatchesToday;
         }
@@ -112,8 +118,6 @@ namespace MyScoreMatch
         /// <returns></returns>
         public MatchModels GetInfo(MatchModels match)
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-
             var matchInfo = GetMatchInfo(match);
             var overUnder = GetMatchOverUnder(match);
 
@@ -137,7 +141,6 @@ namespace MyScoreMatch
         /// <returns></returns>
         public List<MatchModels> GetInfo(List<MatchModels> matches)
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int i = 0;
             foreach ( var match in matches )
             {
@@ -166,7 +169,6 @@ namespace MyScoreMatch
         /// <returns></returns>
         public bool GetAllInfo()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int i = 0;
             foreach ( var match in MatchesToday )
             {

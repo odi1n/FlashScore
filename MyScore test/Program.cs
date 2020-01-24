@@ -13,7 +13,6 @@ namespace MyScore_test
         static void Main(string[] args)
         {
             MyScore query = new MyScore();
-            var parsing = query.GetMatchesToday();
 
             var querys = query.NearestMatches(new MyScoreMatch.Models.NearestMatchesModels()
             {
