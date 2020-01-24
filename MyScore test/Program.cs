@@ -16,21 +16,27 @@ namespace MyScore_test
             var parsing = query.GetMatchesToday();
 
 
-            var infoOverUnder = query.GetInfo(query.MatchesToday[5]);
+            var infoOverUnder = query.GetAllInfo();
 
             Console.Clear();
 
-            Console.WriteLine("name: " +infoOverUnder.Name);
-            foreach ( var match in infoOverUnder.Bookmaker )
+            string test = "";
+            foreach ( var matches in query.MatchesToday )
             {
-                Console.WriteLine("key:"+match.Key  );
-                foreach(var val in match.Value )
+                test += ("name: " + matches.Name + "\n");
+                test +=("time: " + matches.DateStart + "\n");
+                test += ("liga: " + matches.Liga + "\n");
+                test += ("link: " + matches.Link + "\n");
+                foreach ( var match in matches.Bookmaker )
                 {
-                    Console.WriteLine("info: " + val.BkName + " | " + val.Less + " | " + val.More );
+                    test += ("key:" + match.Key + "\n");
+                    foreach ( var val in match.Value )
+                    {
+                        test += ("info: " + val.BkName + " | " + val.Less + " | " + val.More + "\n");
+                    }
                 }
+                test += "\n";
             }
-
-
 
             Console.ReadKey();
         }

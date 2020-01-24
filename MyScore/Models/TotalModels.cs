@@ -12,10 +12,10 @@ namespace MyScoreMatch.Models
         /// <summary>
         /// Больше
         /// </summary>
-        public double More { get; set; }
+        public double? More { get; set; }
         /// <summary>
         /// Меньше
         /// </summary>
-        public double Less { get; set; }
+        public double? Less { get; set; }
     }
 }

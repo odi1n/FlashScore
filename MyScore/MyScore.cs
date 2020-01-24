@@ -80,10 +80,10 @@ namespace MyScoreMatch
         public List<MatchInfoModels> NearestMatches(NearestMatchesModels nearestMatche)
         {
             if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
-            if ( nearestMatche.Hours > 24 ||
-                nearestMatche.Hours < 0||
-                nearestMatche.Minutes > 1440 ||
-                nearestMatche.Minutes < 0 ) throw new ErrorNearestMatches("Указано времени больше чем может быть в сутках");
+            if ( nearestMatche.Hours > 24 || nearestMatche.Hours < -24||
+                nearestMatche.Minutes > 1440 || nearestMatche.Minutes < -1440 )
+                throw new ErrorNearestMatches("Указано времени больше чем может быть в сутках");
+
             return MatchesToday.Where(x => 
             x.DateStart > DateTime.Now &&
             x.DateStart < DateTime.Now.AddHours(nearestMatche.Hours).AddMinutes(nearestMatche.Minutes)).ToList();
@@ -131,21 +131,87 @@ namespace MyScoreMatch
         }
 
         /// <summary>
+        /// Получить информацию обо всех матчах которые были выбраны
+        /// </summary>
+        /// <param name="match">Список выбранных матчей</param>
+        /// <returns></returns>
+        public List<MatchInfoModels> GetInfo(List<MatchInfoModels> matches)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            int i = 0;
+            foreach ( var match in matches )
+            {
+                i++;
+                var matchInfo = GetMatchInfo(match);
+                var overUnder = GetMatchOverUnder(match);
+
+                match.Command1 = matchInfo.Command1;
+                match.Command2 = matchInfo.Command2;
+                match.Country = matchInfo.Country;
+                match.Liga = matchInfo.Liga;
+
+                if ( matchInfo.DateStart != null )
+                    match.DateStart = matchInfo.DateStart;
+
+                match.Bookmaker = overUnder;
+                Console.WriteLine(i + ":" + matches.Count);
+            }
+            return matches;
+        }
+
+        /// <summary>
+        /// Получить информацию обо всех матчах на сегодня
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public bool GetAllInfo()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            int i = 0;
+            foreach ( var match in MatchesToday )
+            {
+                i++;
+                var matchInfo = GetMatchInfo(match);
+                var overUnder = GetMatchOverUnder(match);
+
+                match.Command1 = matchInfo.Command1;
+                match.Command2 = matchInfo.Command2;
+                match.Country = matchInfo.Country;
+                match.Liga = matchInfo.Liga;
+
+                if ( matchInfo.DateStart != null )
+                    match.DateStart = matchInfo.DateStart;
+
+                match.Bookmaker = overUnder;
+                Console.WriteLine(i + ":" + MatchesToday.Count);
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Получить информацию конкретно о матче
         /// </summary>
         /// <param name="match"></param>
         /// <returns></returns>
         private MatchInfoModels GetMatchInfo(MatchInfoModels match)
         {
-            HttpRequest request = _request.httpRequest();
-            request.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-            request.AddHeader("Accept-Encoding", "gzip, deflate");
-            request.AddHeader("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,af;q=0.6");
-            request.AddHeader("Cache-Control", "max-age=0");
-            request.AddHeader("Host", "www.myscore.com.ua");
-            request.AddHeader("Upgrade-Insecure-Requests", "1");
-            HttpResponse response = request.Get(match.Link + "#odds-comparison;over-under;full-time");
-
+            HttpResponse response = null;
+            for ( int i = 0; i < 3; i++ )
+            {
+                try
+                {
+                    HttpRequest request = _request.httpRequest();
+                    request.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+                    request.AddHeader("Accept-Encoding", "gzip, deflate");
+                    request.AddHeader("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,af;q=0.6");
+                    request.AddHeader("Cache-Control", "max-age=0");
+                    request.AddHeader("Host", "www.myscore.com.ua");
+                    request.AddHeader("Upgrade-Insecure-Requests", "1");
+                    response = request.Get(match.Link + "#odds-comparison;over-under;full-time");
+                    break;
+                }
+                catch ( HttpException e ) { }
+            }
             MatchInfoModels mim = Parsing.ParsingMatchInfo(response.ToString()) ;
             return mim;
         }
@@ -157,16 +223,24 @@ namespace MyScoreMatch
         /// <returns></returns>
         private Dictionary<double, List<TotalModels>> GetMatchOverUnder(MatchInfoModels match)
         {
-            HttpRequest request = _request.httpRequest();
-            request.AddHeader("Accept", "*/*");
-            request.AddHeader("x-geoip", "1");
-            request.AddHeader("x-fsign", XFSign);
-            request.AddHeader("accept-language", "*");
-            request.AddHeader("x-requested-with", "XMLHttpRequest");
-            request.AddHeader("x-referer", "https://www.myscore.com.ua/match/"+match.MatchId+"/#odds-comparison;over-under;full-time");
-            request.AddHeader("accept-encoding", "gzip, deflate, br");
-            HttpResponse response = request.Get("https://d.myscore.com.ua/x/feed/d_od_"+match.MatchId+"_ru_1_eu");
-
+            HttpResponse response = null;
+            for ( int i = 0; i < 3; i++ )
+            {
+                try
+                {
+                    HttpRequest request = _request.httpRequest();
+                    request.AddHeader("Accept", "*/*");
+                    request.AddHeader("x-geoip", "1");
+                    request.AddHeader("x-fsign", XFSign);
+                    request.AddHeader("accept-language", "*");
+                    request.AddHeader("x-requested-with", "XMLHttpRequest");
+                    request.AddHeader("x-referer", "https://www.myscore.com.ua/match/" + match.MatchId + "/#odds-comparison;over-under;full-time");
+                    request.AddHeader("accept-encoding", "gzip, deflate, br");
+                    response = request.Get("https://d.myscore.com.ua/x/feed/d_od_" + match.MatchId + "_ru_1_eu");
+                    break;
+                }
+                catch ( HttpException e ) { }
+            }
             var info = Parsing.ParsingMatchOverUnder(response.ToString());
             return info;
 

@@ -122,8 +122,8 @@ namespace MyScoreMatch.Action
                     totalInfo.Add(new TotalModels()
                     {
                         BkName = bkName,
-                        More = double.Parse(more),
-                        Less = double.Parse(less),
+                        More = double.Parse(more == "-" ? "0" : more),
+                        Less = double.Parse(less == "-" ? "0" : less),
                     });
 
                 }
