@@ -59,6 +59,65 @@ private async static void  Test()
     }
 }
 ```
+
+Что получилось в итоге
+```name: Параду - Бискра
+time: 2/6/2020 7:58:51 PM
+liga: Первый дивизион - Тур 16
+link: https://www.myscore.com.ua/match/QLER5aUF/
+key:0.5
+info: 1xBet | 7.5 | 1.05
+info: bet365 | 7.5 | 1.07
+info: Winline | 6.51 | 1.05
+info: Betfair | 7 | 1.07
+key:1
+info: 1xBet | 6.15 | 1.08
+info: Parimatch | 6 | 1.11
+key:1.5
+info: 1xBet | 2.74 | 1.38
+info: bet365 | 2.75 | 1.4
+info: Winline | 2.63 | 1.4
+info: Betfair | 2.75 | 1.4
+info: Parimatch | 2.7 | 1.44
+key:1.75
+info: Winline | 2.32 | 1.51
+key:2
+info: 1xBet | 2.07 | 1.68
+info: Winline | 2.04 | 1.7
+info: Parimatch | 2 | 1.75
+key:2.25
+info: Winline | 1.74 | 1.98
+info: Parimatch | 1.72 | 2.05
+key:2.5
+info: 1xBet | 1.6 | 2.34
+info: bet365 | 1.61 | 2.25
+info: Winline | 1.52 | 2.3
+info: Betfair | 1.53 | 2.45
+info: Parimatch | 1.57 | 2.35
+key:2.75
+info: Winline | 1.39 | 2.67
+key:3
+info: 1xBet | 1.27 | 3.38
+info: Parimatch | 1.27 | 3.6
+key:3.5
+info: 1xBet | 1.18 | 4.12
+info: bet365 | 1.2 | 4.33
+info: Winline | 1.15 | 4.19
+info: Betfair | 1.17 | 4.5
+info: Parimatch | 1.18 | 4.3
+key:4
+info: 1xBet | 1.05 | 7.5
+key:4.5
+info: 1xBet | 1.03 | 9
+info: bet365 | 1.07 | 7.5
+info: Winline | 1.04 | 7.67
+info: Betfair | 1.04 | 9.5
+key:5.5
+info: 1xBet | 1.02 | 15
+info: bet365 | 1.01 | 12
+info: Winline | 1.01 | 11
+info: Betfair | 1.01 | 15
+```
 Все методы асинхронные. Время получения матчей и информации о всех матчах зависит от количества матчей в день.
 
 ### Используются библиотеки:
