@@ -35,8 +35,16 @@
       <HintPath>..\packages\AngleSharp.0.9.11\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Leaf.xNet, Version=5.2.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Leaf.xNet.5.2.5\lib\net452\Leaf.xNet.dll</HintPath>
+    <Reference Include="Flurl, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.2.8.2\lib\net40\Flurl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.Http.2.4.2\lib\net46\Flurl.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -51,14 +59,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Addition\Parsing.cs" />
-    <Compile Include="Addition\Request.cs" />
     <Compile Include="Exception\ErrorNearestMatches.cs" />
     <Compile Include="Exception\ErrorMatchesNull.cs" />
+    <Compile Include="Function\MatchInfomation.cs" />
+    <Compile Include="Models\AllTotalModels.cs" />
     <Compile Include="Models\TotalModels.cs" />
     <Compile Include="Models\CommandModels.cs" />
     <Compile Include="Models\NearestMatchesModels.cs" />
     <Compile Include="Models\MatchModels.cs" />
     <Compile Include="MyScore.cs" />
+    <Compile Include="Addition\MatchAddition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

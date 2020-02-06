@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyScoreApi.Function;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,32 @@ namespace MyScoreApi.Models
         /// <summary>
         /// Букмейкерская контора
         /// </summary>
-        public Dictionary<double,List<TotalModels>> Bookmaker { get; set; }
+        public List<AllTotalModels> Bookmaker { get; set; }
+
+        /// <summary>
+        /// Получить информацию о матче полностью
+        /// </summary>
+        /// <param name="match">Матч</param>
+        /// <returns></returns>
+        public async Task<MatchModels> GetInfo()
+        {
+            MatchInfomation matchInfos = new MatchInfomation();
+            MatchModels matchModels = new MatchModels();
+
+            var matchInfo = await matchInfos.GetMatchInfo(this);
+            var overUnder = await matchInfos.GetMatchOverUnder(this);
+
+            matchModels.Command1 = matchInfo.Command1;
+            matchModels.Command2 = matchInfo.Command2;
+            matchModels.Country = matchInfo.Country;
+            matchModels.Liga = matchInfo.Liga;
+
+            if ( matchInfo.DateStart != null )
+                matchModels.DateStart = matchInfo.DateStart;
+
+            matchModels.Bookmaker = overUnder;
+
+            return matchModels;
+        }
     }
 }

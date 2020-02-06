@@ -1,5 +1,4 @@
-﻿using Leaf.xNet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,7 @@ namespace MyScoreApi.Action
         /// </summary>
         /// <param name="response">строка для парсинга</param>
         /// <returns></returns>
-        public static List<MatchModels> ParsingMMyScore(string response)
+        public static List<MatchModels> MMyScore(string response)
         {
             List<MatchModels> mim = new List<MatchModels>();
             int number = 0;
@@ -66,7 +65,7 @@ namespace MyScoreApi.Action
         /// </summary>
         /// <param name="response">исходный код страницы</param>
         /// <returns></returns>
-        public static MatchModels ParsingMatchInfo(string response)
+        public static MatchModels MatchInfo(string response)
         {
             MatchModels matchInfo = new MatchModels();
 
@@ -100,9 +99,9 @@ namespace MyScoreApi.Action
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static Dictionary<double, List<TotalModels>> ParsingMatchOverUnder(string response)
+        public static List<AllTotalModels> MatchOverUnder(string response)
         {
-            Dictionary<double, List<TotalModels>> bk = new Dictionary<double, List<TotalModels>>();
+            List<AllTotalModels> allTotal = new List<AllTotalModels>();
 
             HtmlParser hp = new HtmlParser();
             var document = hp.Parse(response);
@@ -127,10 +126,14 @@ namespace MyScoreApi.Action
 
                 }
 
-                bk.Add(double.Parse( total), totalInfo);
+                allTotal.Add(new AllTotalModels()
+                {
+                    Coef = double.Parse(total),
+                    Total = totalInfo,
+                });
             }
 
-            return bk;
+            return allTotal;
         }
     }
 }
