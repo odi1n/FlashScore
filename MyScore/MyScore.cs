@@ -1,7 +1,7 @@
 ﻿using Leaf.xNet;
-using MyScoreMatch.Action;
-using MyScoreMatch.Exception;
-using MyScoreMatch.Models;
+using MyScoreApi.Action;
+using MyScoreApi.Exception;
+using MyScoreApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MyScoreMatch
+namespace MyScoreApi
 {
     public class MyScore
     {

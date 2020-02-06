@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MyScoreMatch.Models
+namespace MyScoreApi.Models
 {
     public class MatchModels
     {

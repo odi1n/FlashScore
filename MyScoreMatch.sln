@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScoreMatch", "MyScore\MyScoreMatch.csproj", "{7F6B35C0-C127-40C7-8F08-1E854AF14C95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScoreApi", "MyScore\MyScoreApi.csproj", "{7F6B35C0-C127-40C7-8F08-1E854AF14C95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScore test", "MyScore test\MyScore test.csproj", "{38899E17-622D-442F-9B81-8E7D7D4DBD75}"
 EndProject

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyScoreMatch.Exception
+namespace MyScoreApi.Exception
 {
     [Serializable]
     public class ErrorNearestMatches : System.Exception

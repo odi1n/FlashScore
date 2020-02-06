@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
-using MyScoreMatch.Models;
+using MyScoreApi.Models;
 
-namespace MyScoreMatch.Action
+namespace MyScoreApi.Action
 {
     partial class Parsing
     {
