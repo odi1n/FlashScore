@@ -53,19 +53,6 @@ namespace MyScoreApi
         }
 
         /// <summary>
-        /// Получить матчи в течении указанных часов
-        /// </summary>
-        /// <param name="hours">Часы, матчи которые получим в ближайшие 1(по умолчанию) час</param>
-        /// <returns></returns>
-        public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, long hours = 1)
-        {
-            if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
-            return MatchesToday.Where(x =>
-            x.DateStart > DateTime.Now &&
-            x.DateStart < DateTime.Now.AddHours(hours)).ToList();
-        }
-
-        /// <summary>
         /// Получить матчи в указанном промежутке
         /// </summary>
         /// <param name="nearestMatche">Указать часы или минуты</param>
