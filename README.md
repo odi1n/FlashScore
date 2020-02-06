@@ -64,7 +64,7 @@ private async static void  Test()
 ```name: Параду - Бискра
 time: 2/6/2020 7:58:51 PM
 liga: Первый дивизион - Тур 16
-link: https://www.myscore.com.ua/match/QLER5aUF/
+link: https://...
 key:0.5
 info: 1xBet | 7.5 | 1.05
 info: bet365 | 7.5 | 1.07
