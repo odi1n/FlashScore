@@ -10,13 +10,13 @@ using MyScoreApi;
 Для получения всех матчей на следующий день
 ```C#
 MyScore myScore = new MyScore();
-var ss = await myScore.GetMatches();//Получить все матчи на текущий день
+var ss = await myScore.GetMatches(true);//Получить все матчи на следующий день
 var infos = await ss.GetInfo();//Получить всю информацию о матче
 ```
 Для получение матчей за определенную промежуток времени на текущий день
 ```C#
 MyScore myScore = new MyScore();
-var matches = await myScore.GetMatches();//Получить на следующий день
+var matches = await myScore.GetMatches();//Получить на текущий день
 var info = await matches.GetNearest(DateTime.Now.AddHours(4)).GetInfo();//Получить на 4 часа от текущего времени, информацию об этих матчах
 ```
 
@@ -61,6 +61,6 @@ private async static void  Test()
 ```
 Все методы асинхронные. Время получения матчей и информации о всех матчах зависит от количества матчей в день.
 
-Используются библиотеки:
-1. Flurl, Flurl.http
-2. Anglesharp
+### Используются библиотеки:
+1. Flurl, Flurl.http - запросы
+2. Anglesharp - парсинг
