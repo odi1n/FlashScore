@@ -28,7 +28,7 @@ public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, 
 public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, int minutes = 60);//На сколько минут вперед
 ```
 
-Пример готового примера
+Готовый пример
 ```C#
 private async static void  Test()
 {
