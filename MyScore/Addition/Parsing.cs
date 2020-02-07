@@ -40,9 +40,6 @@ namespace MyScoreApi.Action
                     try { startTime = int.Parse(timePars); } catch ( FormatException e ) { }
                     try { time = DateTime.Parse(timePars); } catch ( FormatException e ){ }
 
-                    var ttsss = pars.OuterHtml;
-                    var tttsss = ttsss.Contains("canceled");
-
                     if ( startTime != null || time != null )
                     {
                         try

@@ -33,10 +33,10 @@ namespace MyScoreApi
                 match.Country = matchInfo.Country;
                 match.Liga = matchInfo.Liga;
 
-                if ( matchInfo.DateStart == null ) match.DateStart = matchInfo.DateStart;
+                if ( match.DateStart == null ) match.DateStart = matchInfo.DateStart;
 
                 match.Bookmaker = overUnder;
-                Console.WriteLine(i + ":" + MatchesToday.Count);
+                Console.WriteLine($"count={MatchesToday.Count}, current={i}, lige={match.Liga} match=\"{match.Name}\", start = {match.DateStart}");
             }
             return MatchesToday;
         }
