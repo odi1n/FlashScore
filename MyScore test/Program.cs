@@ -20,8 +20,8 @@ namespace MyScore_test
         async static void  Test()
         {
             MyScore myScore = new MyScore();
-            var matches = await myScore.GetMatchesAsync(true);
-            var info = await matches.GetNearest(DateTime.Now.AddHours(1)).GetInfoAsync();
+            var matches = await myScore.GetMatchesAsync();
+            var info = await matches.GetNearest(DateTime.Now.AddHours(5)).GetInfoAsync();
 
             Console.Clear();
 

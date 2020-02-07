@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace MyScoreApi.Exception
 {
     [Serializable]
-    public class ErrorNearestMatches : System.Exception
+    public class ErrorNearestMatchesException : System.Exception
     {
-        public ErrorNearestMatches(string Message) : base(Message) { }
+        public ErrorNearestMatchesException(string Message) : base(Message) { }
     }
 }

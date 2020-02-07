@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
 using MyScoreApi.Models;
+using MyScoreApi.Exception;
 
 namespace MyScoreApi.Action
 {
@@ -101,6 +102,8 @@ namespace MyScoreApi.Action
         /// <returns></returns>
         public static List<AllTotalModels> MatchOverUnder(string response)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
             List<AllTotalModels> allTotal = new List<AllTotalModels>();
 
             HtmlParser hp = new HtmlParser();
@@ -108,14 +111,19 @@ namespace MyScoreApi.Action
 
             foreach(var doc in document.QuerySelectorAll("#block-under-over-ft>table") )
             {
-
                 string total = doc.QuerySelectorAll("tbody>tr.odd>td")[1].TextContent;
+
+                if ( total == null ) throw new ErrorOverUnderException("Параметр total - null");
+
                 List<TotalModels> totalInfo = new List<TotalModels>();
                 foreach ( var tbody in doc.QuerySelectorAll("tbody>tr") )
                 {
                     string bkName = tbody.QuerySelector("td.bookmaker>div>a").GetAttribute("title");
                     string more = tbody.QuerySelectorAll("td")[2].QuerySelector("span").TextContent;
                     string less = tbody.QuerySelectorAll("td")[3].QuerySelector("span").TextContent;
+
+                    if ( more == null  ) throw new ErrorOverUnderException("Параметр more - null");
+                    if ( less == null ) throw new ErrorOverUnderException("Параметр less - null");
 
                     totalInfo.Add(new TotalModels()
                     {

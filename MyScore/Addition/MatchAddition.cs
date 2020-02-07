@@ -48,7 +48,7 @@ namespace MyScoreApi
         /// <returns></returns>
         public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, int minutes = 60)
         {
-            if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
+            if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNullException("Список пуст, нужно получить значения");
             return MatchesToday.Where(x => x.DateStart > DateTime.Now && x.DateStart < DateTime.Now.AddMinutes(minutes)).ToList();
         }
 
@@ -59,10 +59,10 @@ namespace MyScoreApi
         /// <returns></returns>
         public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, NearestMatchesModels nearestMatche)
         {
-            if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNull("Список пуст, нужно получить значения");
+            if ( MatchesToday.Count == 0 ) throw new ErrorMatchesNullException("Список пуст, нужно получить значения");
             if ( nearestMatche.Hours > 24 || nearestMatche.Hours < -24 ||
                 nearestMatche.Minutes > 1440 || nearestMatche.Minutes < -1440 )
-                throw new ErrorNearestMatches("Указано времени больше чем может быть в сутках");
+                throw new ErrorNearestMatchesException("Указано времени больше чем может быть в сутках");
 
             return MatchesToday.Where(x =>
             x.DateStart > DateTime.Now &&

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace MyScoreApi.Exception
 {
     [Serializable]
-    public class ErrorMatchesNull : System.Exception
+    public class ErrorOverUnderException : System.Exception
     {
-        public ErrorMatchesNull(string Message) : base(Message) { }
+        public ErrorOverUnderException(string Message) : base(Message) { }
     }
 }
