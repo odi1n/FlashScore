@@ -62,13 +62,13 @@ namespace MyScoreApi.Models
         /// </summary>
         /// <param name="match">Матч</param>
         /// <returns></returns>
-        public async Task<MatchModels> GetInfo()
+        public async Task<MatchModels> GetInfoAsync()
         {
             MatchInfomation matchInfos = new MatchInfomation();
             MatchModels matchModels = new MatchModels();
 
-            var matchInfo = await matchInfos.GetMatchInfo(this);
-            var overUnder = await matchInfos.GetMatchOverUnder(this);
+            var matchInfo = await matchInfos.GetMatchInfoAsync(this);
+            var overUnder = await matchInfos.GetMatchOverUnderAsync(this);
 
             matchModels.Command1 = matchInfo.Command1;
             matchModels.Command2 = matchInfo.Command2;

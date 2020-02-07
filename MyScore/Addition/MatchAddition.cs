@@ -17,7 +17,7 @@ namespace MyScoreApi
         /// </summary>
         /// <param name="match">Список выбранных матчей</param>
         /// <returns></returns>
-        public static async Task<List<MatchModels>> GetInfo(this List<MatchModels> MatchesToday)
+        public static async Task<List<MatchModels>> GetInfoAsync(this List<MatchModels> MatchesToday)
         {
             MatchInfomation matchInfomathion = new MatchInfomation();
 
@@ -25,8 +25,8 @@ namespace MyScoreApi
             foreach ( var match in MatchesToday )
             {
                 i++;
-                var matchInfo = await matchInfomathion.GetMatchInfo(match);
-                var overUnder = await matchInfomathion.GetMatchOverUnder(match);
+                var matchInfo = await matchInfomathion.GetMatchInfoAsync(match);
+                var overUnder = await matchInfomathion.GetMatchOverUnderAsync(match);
 
                 match.Command1 = matchInfo.Command1;
                 match.Command2 = matchInfo.Command2;

@@ -35,7 +35,7 @@ namespace MyScoreApi
         /// </summary>
         /// <param name="newInfo">false - сегодня, true - завтра</param>
         /// <returns></returns>
-        public async Task<List<MatchModels>> GetMatches(bool newInfo = false)
+        public async Task<List<MatchModels>> GetMatchesAsync(bool newInfo = false)
         {
             _client = new FlurlClient();
 

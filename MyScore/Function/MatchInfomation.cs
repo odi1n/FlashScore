@@ -22,7 +22,7 @@ namespace MyScoreApi.Function
         /// Ключ для получение информации о матче
         /// </summary>
         /// <returns></returns>
-        private async Task<string> ParsingXFSign()
+        private async Task<string> ParsingXFSignAsync()
         {
             if ( _xFSign == null )
             {
@@ -44,9 +44,9 @@ namespace MyScoreApi.Function
         /// </summary>
         /// <param name="match"></param>
         /// <returns></returns>
-        public async Task<MatchModels> GetMatchInfo(MatchModels match)
+        public async Task<MatchModels> GetMatchInfoAsync(MatchModels match)
         {
-            await ParsingXFSign();
+            await ParsingXFSignAsync();
 
             FlurlClient client = new FlurlClient();
 
@@ -67,9 +67,9 @@ namespace MyScoreApi.Function
         /// </summary>
         /// <param name="match">Матч о котором нужно получить информацию</param>
         /// <returns></returns>
-        public async Task<List<AllTotalModels>> GetMatchOverUnder(MatchModels match)
+        public async Task<List<AllTotalModels>> GetMatchOverUnderAsync(MatchModels match)
         {
-            await ParsingXFSign();
+            await ParsingXFSignAsync();
 
             FlurlClient client = new FlurlClient();
 
