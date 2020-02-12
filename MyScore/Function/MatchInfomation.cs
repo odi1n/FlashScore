@@ -15,7 +15,7 @@ namespace MyScoreApi.Function
         /// <summary>
         /// Ключ
         /// </summary>
-        private static string _xFSign { get; set; }
+        private static string _xFSign { get; set; } = "SW9D1eZo";
         private static string _dec { get; set; }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace MyScoreApi.Function
         /// <returns></returns>
         public async Task<MatchModels> GetMatchInfoAsync(MatchModels match)
         {
-            await ParsingXFSignAsync();
+            //await ParsingXFSignAsync();
 
             FlurlClient client = new FlurlClient();
 
@@ -69,7 +69,7 @@ namespace MyScoreApi.Function
         /// <returns></returns>
         public async Task<List<AllTotalModels>> GetMatchOverUnderAsync(MatchModels match)
         {
-            await ParsingXFSignAsync();
+            //await ParsingXFSignAsync();
 
             FlurlClient client = new FlurlClient();
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
 using MyScoreApi.Models;
 using MyScoreApi.Exception;
+using System.Globalization;
 
 namespace MyScoreApi.Action
 {
@@ -40,12 +41,18 @@ namespace MyScoreApi.Action
                     try { startTime = int.Parse(timePars); } catch ( FormatException e ) { }
                     try { time = DateTime.Parse(timePars); } catch ( FormatException e ){ }
 
+                    if( startTime  != null )
+                    {
+
+                    }
+
                     if ( startTime != null || time != null )
                     {
                         try
                         {
-                            mim[number].DateStart = time != null ? DateTime.Parse(timePars).AddHours(1) : DateTime.Now.AddMinutes(-startTime.Value).AddHours(1);
-                            //mim[number].DateStart = DateTime.Parse(timePars);
+                            mim[number].DateStart = time != null ? 
+                                DateTime.Parse(timePars).AddHours(1) : 
+                                DateTime.Now.AddMinutes(-startTime.Value);
                         }
                         catch ( FormatException )
                         {

@@ -25,6 +25,7 @@ namespace MyScoreApi
             foreach ( var match in MatchesToday )
             {
                 i++;
+
                 var matchInfo = await matchInfomathion.GetMatchInfoAsync(match);
                 var overUnder = await matchInfomathion.GetMatchOverUnderAsync(match);
 
@@ -34,6 +35,8 @@ namespace MyScoreApi
                 match.Liga = matchInfo.Liga;
 
                 if ( match.DateStart == null ) match.DateStart = matchInfo.DateStart;
+
+                var ttsss = match.DateStart;
 
                 match.Bookmaker = overUnder;
                 Console.WriteLine($"count={MatchesToday.Count}, current={i}, lige={match.Liga} match=\"{match.Name}\", start = {match.DateStart}");

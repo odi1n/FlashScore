@@ -21,29 +21,29 @@ namespace MyScore_test
         {
             MyScore myScore = new MyScore();
             var matches = await myScore.GetMatchesAsync();
-            var info = await matches.GetNearest(DateTime.Now.AddHours(5)).GetInfoAsync();
+            var info = await matches.GetInfoAsync();
 
-            Console.Clear();
+            //Console.Clear();
 
-            foreach ( var match in info )
-            {
-                string test = "";
+            //foreach ( var match in info )
+            //{
+            //    string test = "";
 
-                test += ("name: " + match.Name + "\n");
-                test += ("time: " + match.DateStart + "\n");
-                test += ("liga: " + match.Liga + "\n");
-                test += ("link: " + match.Link + "\n");
+            //    test += ("name: " + match.Name + "\n");
+            //    test += ("time: " + match.DateStart + "\n");
+            //    test += ("liga: " + match.Liga + "\n");
+            //    test += ("link: " + match.Link + "\n");
 
-                foreach ( var matchTotal in match.Bookmaker )
-                {
-                    test += ("key:" + matchTotal.Coef + "\n");
-                    foreach ( var val in matchTotal.Total )
-                    {
-                        test += ("info: " + val.BkName + " | " + val.Less + " | " + val.More + "\n");
-                    }
-                }
-                Console.WriteLine(test + "\n");
-            }
+            //    foreach ( var matchTotal in match.Bookmaker )
+            //    {
+            //        test += ("key:" + matchTotal.Coef + "\n");
+            //        foreach ( var val in matchTotal.Total )
+            //        {
+            //            test += ("info: " + val.BkName + " | " + val.Less + " | " + val.More + "\n");
+            //        }
+            //    }
+            //    Console.WriteLine(test + "\n");
+            //}
         }
     }
 }
