@@ -8,7 +8,13 @@ namespace MyScoreApi.Models
 {
     public class AllTotalModels
     {
-        public double Coef { get; set; }
-        public List<TotalModels> Total { get; set; }
+        /// <summary>
+        /// Тотал команды
+        /// </summary>
+        public double Total { get; set; }
+        /// <summary>
+        /// Больше меньше
+        /// </summary>
+        public List<TotalModels> Info { get; set; }
     }
 }

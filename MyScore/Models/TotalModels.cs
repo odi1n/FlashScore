@@ -8,6 +8,9 @@ namespace MyScoreApi.Models
 {
     public class TotalModels
     {
+        /// <summary>
+        /// Название БК конторы
+        /// </summary>
         public string BkName { get; set; }
         /// <summary>
         /// Больше

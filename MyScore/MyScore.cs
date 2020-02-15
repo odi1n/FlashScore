@@ -18,12 +18,15 @@ namespace MyScoreApi
         /// <summary>
         /// Матчи которые будут сегодня
         /// </summary>
-        public List<MatchModels> MatchesToday { get; set; } = new List<MatchModels>();
+        public List<MatchModels> Matches { get; set; } = new List<MatchModels>();
+        /// <summary>
+        /// Получать новые матчи
+        /// </summary>
+        public static bool GetNewInfo { get; set; } = false;
         /// <summary>
         /// Получать новые матчи если новый день
         /// </summary>
         private FlurlClient _client { get; set; }
-        private MatchInfomation _match { get; set; } = new MatchInfomation();
 
         public MyScore()
         {
@@ -37,7 +40,10 @@ namespace MyScoreApi
         /// <returns></returns>
         public async Task<List<MatchModels>> GetMatchesAsync(bool newInfo = false)
         {
+            GetNewInfo = newInfo;
             _client = new FlurlClient();
+
+            string response = null;
 
             _client.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
             _client.Headers.Add("Accept-Encoding", "gzip, deflate");
@@ -46,14 +52,13 @@ namespace MyScoreApi
             _client.Headers.Add("Host", "m.myscore.com.ua");
             _client.Headers.Add("Upgrade-Insecure-Requests", "1");
 
-            string response = null;
             if ( newInfo )
                 response = await _client.Request("https://m.myscore.com.ua/" + "?d=1").GetStringAsync();
             else
                 response = await _client.Request("https://m.myscore.com.ua/").GetStringAsync();
 
-            MatchesToday = Parsing.MMyScore(response).OrderBy(x => x.DateStart).ToList();
-            return MatchesToday;
+            Matches = Parsing.MMyScore(response).OrderBy(x => x.DateStart).ToList();
+            return Matches;
         }
     }
 }

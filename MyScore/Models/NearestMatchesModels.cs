@@ -8,7 +8,13 @@ namespace MyScoreApi.Models
 {
     public class NearestMatchesModels
     {
+        /// <summary>
+        /// Часы
+        /// </summary>
         public double Hours { get; set; } = 0;
+        /// <summary>
+        /// Минуты
+        /// </summary>
         public double Minutes { get; set; } = 0;
     }
 }

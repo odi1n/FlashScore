@@ -16,7 +16,6 @@ namespace MyScoreApi.Function
         /// Ключ
         /// </summary>
         private static string _xFSign { get; set; } = "SW9D1eZo";
-        private static string _dec { get; set; }
 
         /// <summary>
         /// Ключ для получение информации о матче
@@ -34,7 +33,6 @@ namespace MyScoreApi.Function
                 string response = await client.Request("https://www.myscore.com.ua/x/js/core.js").GetStringAsync();
 
                 _xFSign = Regex.Match(response.ToString(), @"\|utilTran\|(.*?)\|").Groups[1].Value;
-                _dec = Regex.Match(response.ToString(), @"\|Dec\|(.*?)\|").Groups[1].Value;
             }
             return _xFSign;
         }

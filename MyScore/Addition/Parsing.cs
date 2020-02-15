@@ -90,6 +90,11 @@ namespace MyScoreApi.Action
 
             try
             {
+                var date = DateTime.Parse(document.QuerySelector("#utime").TextContent);
+
+                if ( MyScore.GetNewInfo )
+                    date.AddDays(1);
+
                 matchInfo.DateStart = DateTime.Parse(document.QuerySelector("#utime").TextContent);
             }
             catch (FormatException)
@@ -140,8 +145,8 @@ namespace MyScoreApi.Action
 
                 allTotal.Add(new AllTotalModels()
                 {
-                    Coef = double.Parse(total),
-                    Total = totalInfo,
+                    Total = double.Parse(total),
+                    Info= totalInfo,
                 });
             }
 
