@@ -3,6 +3,7 @@ using MyScoreApi.Function;
 using MyScoreApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,11 +37,8 @@ namespace MyScoreApi
 
                 if ( match.DateStart == null ) match.DateStart = matchInfo.DateStart;
 
-                if ( match.DateStart != null && MyScore.GetNewInfo )
-                    match.DateStart = match.DateStart.Value.AddDays(1);
-
                 match.Bookmaker = overUnder;
-                Console.WriteLine($"count={MatchesToday.Count}, current={i}, lige={match.Liga} match=\"{match.Name}\", start = {match.DateStart}");
+                Console.WriteLine($"count={MatchesToday.Count}, current={i}, lige={match.Liga} match=\"{match.Name}\", start = {match.DateStart.Value.ToString("f", CultureInfo.GetCultureInfo("ru-ru"))}");
             }
             return MatchesToday;
         }

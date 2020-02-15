@@ -21,49 +21,42 @@ namespace MyScoreApi.Action
         {
             List<MatchModels> mim = new List<MatchModels>();
             int number = 0;
-            HtmlParser hp = new HtmlParser();
-            var document = hp.Parse(response);
 
-            foreach(var parsing in document.QuerySelectorAll("#main>#score-data") )
+            var document = new HtmlParser().Parse(response);
+            foreach ( var pars in document.QuerySelectorAll("#main>#score-data>a") )
             {
-                foreach ( var pars in parsing.QuerySelectorAll("a") )
-                {
-                    mim.Add(new MatchModels() { Link = "https://www.myscore.com.ua" + pars.GetAttribute("href") });
-                }
-
-                foreach ( var pars in parsing.QuerySelectorAll("span") )
-                {
-                    var timePars = pars.FirstChild.TextContent.Replace("'", "");
-
-                    int? startTime = null;
-                    DateTime? time = null;
-
-                    try { startTime = int.Parse(timePars); } catch ( FormatException e ) { }
-                    try { time = DateTime.Parse(timePars); } catch ( FormatException e ){ }
-
-                    if( startTime  != null )
-                    {
-
-                    }
-
-                    if ( startTime != null || time != null )
-                    {
-                        try
-                        {
-                            mim[number].DateStart = time != null ? 
-                                DateTime.Parse(timePars).AddHours(1) : 
-                                DateTime.Now.AddMinutes(-startTime.Value);
-                        }
-                        catch ( FormatException )
-                        {
-                            mim[number].DateStart = null;
-                        }
-                        number++;
-                    }
-                }
+                mim.Add(new MatchModels() { Link = "https://www.myscore.com.ua" + pars.GetAttribute("href") });
             }
+
+            number = 0;
+            foreach ( var pars in document.QuerySelectorAll("#main>#score-data>span") )
+            {
+                var timePars = pars.FirstChild.TextContent.Replace("'", "");
+
+                DateTime? time;
+
+                if ( timePars.Contains(":") )
+                    time = DateTime.Parse(timePars).AddHours(1);
+                else
+                {
+                    int checkNumb = 0;
+                    try { checkNumb = int.Parse(timePars); } catch { }
+
+                    if ( checkNumb == 0 )
+                        time = DateTime.Now.AddMinutes(-45);
+                    else
+                        time = DateTime.Now.AddMinutes(-Convert.ToInt32(timePars));
+                }
+
+                if ( MyScore.GetNewInfo )
+                    time =time.Value.AddDays(1);
+
+                mim[number].DateStart = time;
+                number++;
+            }
+
             return mim;
-        }        
+        }
 
         /// <summary>
         /// Спарсить информацию о матчей
