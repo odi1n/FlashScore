@@ -36,7 +36,8 @@ namespace MyScoreApi
 
                 if ( match.DateStart == null ) match.DateStart = matchInfo.DateStart;
 
-                var ttsss = match.DateStart;
+                if ( match.DateStart != null && MyScore.GetNewInfo )
+                    match.DateStart = match.DateStart.Value.AddDays(1);
 
                 match.Bookmaker = overUnder;
                 Console.WriteLine($"count={MatchesToday.Count}, current={i}, lige={match.Liga} match=\"{match.Name}\", start = {match.DateStart}");

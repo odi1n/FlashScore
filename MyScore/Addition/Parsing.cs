@@ -91,11 +91,7 @@ namespace MyScoreApi.Action
             try
             {
                 var date = DateTime.Parse(document.QuerySelector("#utime").TextContent);
-
-                if ( MyScore.GetNewInfo )
-                    date.AddDays(1);
-
-                matchInfo.DateStart = DateTime.Parse(document.QuerySelector("#utime").TextContent);
+                matchInfo.DateStart = date;
             }
             catch (FormatException)
             {

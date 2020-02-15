@@ -20,7 +20,7 @@ namespace MyScore_test
         async static void  Test()
         {
             MyScore myScore = new MyScore();
-            var matches = await myScore.GetMatchesAsync();
+            var matches = await myScore.GetMatchesAsync(true);
             var info = await matches.GetInfoAsync();
 
             //Console.Clear();
