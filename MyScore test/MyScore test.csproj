@@ -51,9 +51,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyScore\MyScoreApi.csproj">
+    <ProjectReference Include="..\MyScore\MyScore.csproj">
       <Project>{7f6b35c0-c127-40c7-8f08-1e854af14c95}</Project>
-      <Name>MyScoreApi</Name>
+      <Name>MyScore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

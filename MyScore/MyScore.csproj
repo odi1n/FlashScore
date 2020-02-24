@@ -68,7 +68,7 @@
     <Compile Include="Models\CommandModels.cs" />
     <Compile Include="Models\NearestMatchesModels.cs" />
     <Compile Include="Models\MatchModels.cs" />
-    <Compile Include="MyScore.cs" />
+    <Compile Include="MyScoreApi.cs" />
     <Compile Include="Addition\MatchAddition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using Flurl.Http;
-using MyScoreApi.Action;
-using MyScoreApi.Models;
+using MyScore.Action;
+using MyScore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MyScoreApi.Function
+namespace MyScore.Function
 {
     partial class MatchInfomation 
     {

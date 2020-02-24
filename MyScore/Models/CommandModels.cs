@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyScoreApi.Models
+namespace MyScore.Models
 {
     public class CommandModels
     {

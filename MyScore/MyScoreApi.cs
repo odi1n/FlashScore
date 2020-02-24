@@ -1,6 +1,6 @@
-﻿using MyScoreApi.Action;
-using MyScoreApi.Exception;
-using MyScoreApi.Models;
+﻿using MyScore.Action;
+using MyScore.Exception;
+using MyScore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +9,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using MyScoreApi.Function;
+using MyScore.Function;
 
-namespace MyScoreApi
+namespace MyScore
 {
-    public class MyScore
+    public class MyScoreApi
     {
         /// <summary>
         /// Матчи которые будут сегодня
@@ -28,7 +28,7 @@ namespace MyScoreApi
         /// </summary>
         private FlurlClient _client { get; set; }
 
-        public MyScore()
+        public MyScoreApi()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
         }

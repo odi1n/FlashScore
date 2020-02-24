@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
-using MyScoreApi.Models;
-using MyScoreApi.Exception;
+using MyScore.Models;
+using MyScore.Exception;
 using System.Globalization;
 
-namespace MyScoreApi.Action
+namespace MyScore.Action
 {
     partial class Parsing
     {
@@ -48,7 +48,7 @@ namespace MyScoreApi.Action
                         time = DateTime.Now.AddMinutes(-Convert.ToInt32(timePars));
                 }
 
-                if ( MyScore.GetNewInfo )
+                if ( MyScoreApi.GetNewInfo )
                     time =time.Value.AddDays(1);
 
                 mim[number].DateStart = time;

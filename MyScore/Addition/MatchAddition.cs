@@ -1,6 +1,6 @@
-﻿using MyScoreApi.Exception;
-using MyScoreApi.Function;
-using MyScoreApi.Models;
+﻿using MyScore.Exception;
+using MyScore.Function;
+using MyScore.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyScoreApi
+namespace MyScore
 {
    
     public static class MatchAddition
@@ -35,7 +35,7 @@ namespace MyScoreApi
                 match.Country = matchInfo.Country;
                 match.Liga = matchInfo.Liga;
 
-                if ( match.DateStart == null ) match.DateStart = matchInfo.DateStart;
+                //if ( match.DateStart == null ) match.DateStart = matchInfo.DateStart;
 
                 match.Bookmaker = overUnder;
                 Console.WriteLine($"count={MatchesToday.Count}, current={i}, lige={match.Liga} match=\"{match.Name}\", start = {match.DateStart.Value.ToString("f", CultureInfo.GetCultureInfo("ru-ru"))}");

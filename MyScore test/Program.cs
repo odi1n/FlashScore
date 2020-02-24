@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyScoreApi;
+using MyScore;
 using System.IO;
 
 namespace MyScore_test
@@ -19,8 +19,8 @@ namespace MyScore_test
 
         async static void  Test()
         {
-            MyScore myScore = new MyScore();
-            var matches = await myScore.GetMatchesAsync(true);
+            MyScoreApi myScore = new MyScoreApi();
+            var matches = await myScore.GetMatchesAsync();
             var info = await matches.GetInfoAsync();
 
             //Console.Clear();

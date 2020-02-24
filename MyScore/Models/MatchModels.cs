@@ -1,4 +1,4 @@
-﻿using MyScoreApi.Function;
+﻿using MyScore.Function;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MyScoreApi.Models
+namespace MyScore.Models
 {
     public class MatchModels
     {

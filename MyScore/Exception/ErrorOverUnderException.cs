@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyScoreApi.Exception
+namespace MyScore.Exception
 {
     [Serializable]
     public class ErrorOverUnderException : System.Exception
