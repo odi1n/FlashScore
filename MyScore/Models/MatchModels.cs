@@ -56,6 +56,10 @@ namespace MyScore.Models
         /// Букмейкерская контора
         /// </summary>
         public List<AllTotalModels> Bookmaker { get; set; }
+        /// <summary>
+        /// Информация о голах команд
+        /// </summary>
+        public H2HModels H2H { get; set; }
 
         /// <summary>
         /// Получить информацию о матче полностью

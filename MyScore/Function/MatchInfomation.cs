@@ -83,5 +83,28 @@ namespace MyScore.Function
             var info = Parsing.MatchOverUnder(response.ToString());
             return info;
         }
+
+        /// <summary>
+        /// Получить информацию о голах команды
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public async Task<H2HModels> GetH2H(MatchModels match)
+        {
+            FlurlClient client = new FlurlClient();
+
+            client.Headers.Add("Accept", "*/*");
+            //client.Headers.Add("x-geoip", "1");
+            client.Headers.Add("x-fsign", _xFSign);
+            client.Headers.Add("accept-language", "*");
+            client.Headers.Add("x-requested-with", "XMLHttpRequest");
+            client.Headers.Add("x-referer", "https://www.myscore.com.ua/match/" + match.MatchId + "/#odds-comparison;over-under;full-time");
+            client.Headers.Add("accept-encoding", "gzip, deflate, br");
+
+            string response = await client.Request("https://d.myscore.com.ua/x/feed/" + "d_hh_" + match.MatchId + "_ru_1_eu").GetStringAsync();
+            var info = Parsing.H2HInfo(response.ToString());
+            return info;
+        }
+
     }
 }

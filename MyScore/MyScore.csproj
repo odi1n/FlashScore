@@ -64,6 +64,9 @@
     <Compile Include="Exception\ErrorMatchesNullException.cs" />
     <Compile Include="Function\MatchInfomation.cs" />
     <Compile Include="Models\AllTotalModels.cs" />
+    <Compile Include="Models\H2HMatchModels.cs" />
+    <Compile Include="Models\H2HModels.cs" />
+    <Compile Include="Models\InfoGameModels.cs" />
     <Compile Include="Models\TotalModels.cs" />
     <Compile Include="Models\CommandModels.cs" />
     <Compile Include="Models\NearestMatchesModels.cs" />

@@ -141,5 +141,71 @@ namespace MyScore.Action
 
             return allTotal;
         }
+
+        /// <summary>
+        /// Получить информацию о голах матчей
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static H2HModels H2HInfo(string response)
+        {
+            H2HModels h2hInfo = new H2HModels();
+
+            HtmlParser hp = new HtmlParser();
+            var document = hp.Parse(response);
+
+            int number = 0;
+
+            foreach ( var overall in document.QuerySelectorAll("#tab-h2h-overall>.h2h-wrapper>table") )
+            {
+                var lastGame = new InfoGameModels();
+                var h2hMatch = new H2HMatchModels();
+
+                var name = overall.QuerySelector("thead>tr>td").TextContent.Split(':');
+                lastGame.Name = string.Join(" ",name.Skip(1));
+                lastGame.Match = new List<H2HMatchModels>();
+
+                foreach ( var matchInfo in overall.QuerySelectorAll("tbody>tr") )
+                {
+                    var matchOuthHtml = matchInfo.OuterHtml;
+                    if ( matchInfo.Matches("tr.hid") || matchOuthHtml.Contains("apology last") ) break;
+
+                    var infoGoal = matchInfo.QuerySelector("td>span.score>strong").TextContent;
+                    string[] goal = null;
+                    if ( infoGoal != "-" )
+                        goal = infoGoal.Split(new char[] { ':', ' ' });
+                    else
+                        goal = new string[] { "0", "0", "0", "0" };
+                    var nameCommand = matchInfo.QuerySelectorAll("td.name");
+
+                    h2hMatch = new H2HMatchModels()
+                    {
+                        Command1 = new CommandModels()
+                        {
+                            Goal = int.Parse(goal.First()),
+                            Name = nameCommand[0].TextContent,
+                        },
+                        Command2 = new CommandModels()
+                        {
+                            Goal = int.Parse(goal.Last()),
+                            Name = nameCommand[1].TextContent
+                        },
+                    };
+                    lastGame.Match.Add(h2hMatch);
+                }
+
+                if(number == 0 )
+                    h2hInfo.LastGameCommand1 = lastGame;
+                else if(number == 1)
+                    h2hInfo.LastGameCommand2 = lastGame;
+                else
+                    h2hInfo.Confrontation = lastGame;
+
+                number++;
+            }
+
+            return h2hInfo;
+        }
+
     }
 }
