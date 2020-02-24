@@ -66,23 +66,61 @@ namespace MyScore.Models
         /// </summary>
         /// <param name="match">Матч</param>
         /// <returns></returns>
-        public async Task<MatchModels> GetInfoAsync()
+        public async Task<MatchModels> GetInfoAsync(bool info = true, bool overUnder = true,bool h2h = false)
         {
             MatchInfomation matchInfos = new MatchInfomation();
-            MatchModels matchModels = new MatchModels();
+            MatchModels matchModels = this;
 
-            var matchInfo = await matchInfos.GetMatchInfoAsync(this);
-            var overUnder = await matchInfos.GetMatchOverUnderAsync(this);
+            if ( info )
+            {
+                var getMatchInfo = await matchInfos.GetMatchInfoAsync(this);
+                matchModels.Command1 = getMatchInfo.Command1;
+                matchModels.Command2 = getMatchInfo.Command2;
+                matchModels.Country = getMatchInfo.Country;
+                matchModels.Liga = getMatchInfo.Liga;
+            }
 
-            matchModels.Command1 = matchInfo.Command1;
-            matchModels.Command2 = matchInfo.Command2;
-            matchModels.Country = matchInfo.Country;
-            matchModels.Liga = matchInfo.Liga;
+            if ( overUnder )
+            {
+                var getOverUnder = await matchInfos.GetMatchOverUnderAsync(this);
+                matchModels.Bookmaker = getOverUnder;
+            }
 
-            if ( matchInfo.DateStart != null )
-                matchModels.DateStart = matchInfo.DateStart;
+            if ( h2h )
+            {
+                var getH2H = await matchInfos.GetH2H(this);
+                matchModels.H2H = getH2H;
+            }
 
-            matchModels.Bookmaker = overUnder;
+            return matchModels;
+        }
+
+        /// <summary>
+        /// Получить более менее команд
+        /// </summary>
+        /// <returns></returns>
+        public async Task<MatchModels> GetOverUnderAsync()
+        {
+            MatchInfomation matchInfos = new MatchInfomation();
+            MatchModels matchModels = this;
+
+            var getOverUnder = await matchInfos.GetMatchOverUnderAsync(this);
+            matchModels.Bookmaker = getOverUnder;
+
+            return matchModels;
+        }
+
+        /// <summary>
+        /// Получить голы команды
+        /// </summary>
+        /// <returns></returns>
+        public async Task<MatchModels> GetH2HAsync()
+        {
+            MatchInfomation matchInfos = new MatchInfomation();
+            MatchModels matchModels = this;
+
+            var getH2H = await matchInfos.GetH2H(this);
+            matchModels.H2H = getH2H;
 
             return matchModels;
         }
