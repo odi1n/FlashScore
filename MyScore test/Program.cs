@@ -20,8 +20,9 @@ namespace MyScore_test
         async static void  Test()
         {
             MyScoreApi myScore = new MyScoreApi();
-            var matches = await myScore.GetMatchesAsync();
+            var matches = await myScore.GetAllMatchesAsync();
             var info = await matches.GetInfoAsync(h2h:true);
+
 
             //Console.Clear();
 

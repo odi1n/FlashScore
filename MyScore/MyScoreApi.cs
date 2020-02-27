@@ -20,13 +20,9 @@ namespace MyScore
         /// </summary>
         public List<MatchModels> Matches { get; set; } = new List<MatchModels>();
         /// <summary>
-        /// Получать новые матчи
+        /// Новые матчи
         /// </summary>
-        public static bool GetNewInfo { get; set; } = false;
-        /// <summary>
-        /// Получать новые матчи если новый день
-        /// </summary>
-        private FlurlClient _client { get; set; }
+        public static bool NewInfo { get; set; }
 
         public MyScoreApi()
         {
@@ -38,26 +34,25 @@ namespace MyScore
         /// </summary>
         /// <param name="newInfo">false - сегодня, true - завтра</param>
         /// <returns></returns>
-        public async Task<List<MatchModels>> GetMatchesAsync(bool newInfo = false)
+        public async Task<List<MatchModels>> GetAllMatchesAsync(bool newInfo = false)
         {
-            GetNewInfo = newInfo;
-            _client = new FlurlClient();
+            NewInfo = newInfo;
+
+            FlurlClient client = new FlurlClient();
+            client.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+            client.Headers.Add("Accept-Encoding", "gzip, deflate");
+            client.Headers.Add("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,af;q=0.6");
+            client.Headers.Add("Cache-Control", "max-age=0");
+            client.Headers.Add("Host", "m.myscore.com.ua");
+            client.Headers.Add("Upgrade-Insecure-Requests", "1");
 
             string response = null;
-
-            _client.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-            _client.Headers.Add("Accept-Encoding", "gzip, deflate");
-            _client.Headers.Add("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,af;q=0.6");
-            _client.Headers.Add("Cache-Control", "max-age=0");
-            _client.Headers.Add("Host", "m.myscore.com.ua");
-            _client.Headers.Add("Upgrade-Insecure-Requests", "1");
-
             if ( newInfo )
-                response = await _client.Request("https://m.myscore.com.ua/" + "?d=1").GetStringAsync();
+                response = await client.Request("https://m.myscore.com.ua/" + "?d=1").GetStringAsync();
             else
-                response = await _client.Request("https://m.myscore.com.ua/").GetStringAsync();
+                response = await client.Request("https://m.myscore.com.ua/").GetStringAsync();
 
-            Matches = Parsing.MMyScore(response).OrderBy(x => x.DateStart).ToList();
+            Matches = Parsing.MMyScore(response).ToList();
             return Matches;
         }
     }

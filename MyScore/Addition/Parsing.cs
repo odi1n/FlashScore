@@ -7,6 +7,8 @@ using AngleSharp.Parser.Html;
 using MyScore.Models;
 using MyScore.Exception;
 using System.Globalization;
+using MyScore.Models.Coefficient;
+using MyScore.Models.H2H;
 
 namespace MyScore.Action
 {
@@ -25,7 +27,10 @@ namespace MyScore.Action
             var document = new HtmlParser().Parse(response);
             foreach ( var pars in document.QuerySelectorAll("#main>#score-data>a") )
             {
-                mim.Add(new MatchModels() { Link = "https://www.myscore.com.ua" + pars.GetAttribute("href") });
+                mim.Add(new MatchModels() {
+                    Link = "https://www.myscore.com.ua" + pars.GetAttribute("href"),
+                    Match = new MatchInfoModels(),
+                });
             }
 
             number = 0;
@@ -48,10 +53,10 @@ namespace MyScore.Action
                         time = DateTime.Now.AddMinutes(-Convert.ToInt32(timePars));
                 }
 
-                if ( MyScoreApi.GetNewInfo )
+                if ( MyScoreApi.NewInfo )
                     time =time.Value.AddDays(1);
 
-                mim[number].DateStart = time;
+                mim[number].Match.DateStart = time;
                 number++;
             }
 
@@ -70,25 +75,27 @@ namespace MyScore.Action
             HtmlParser hp = new HtmlParser();
             var document = hp.Parse(response);
 
-            matchInfo.Command1.Name = document.QuerySelectorAll(".participant-imglink>img")[0].GetAttribute("alt");
-            matchInfo.Command2.Name = document.QuerySelectorAll(".participant-imglink>img")[1].GetAttribute("alt");
+            matchInfo.Match.Command1.Name = document.QuerySelectorAll(".participant-imglink>img")[0].GetAttribute("alt");
+            matchInfo.Match.Command2.Name = document.QuerySelectorAll(".participant-imglink>img")[1].GetAttribute("alt");
 
             if ( document.QuerySelectorAll("span.scoreboard").Count() > 0 )
             {
-                matchInfo.Command1.Goal = int.Parse( document.QuerySelectorAll(".scoreboard")[0].TextContent);
-                matchInfo.Command2.Goal = int.Parse( document.QuerySelectorAll(".scoreboard")[1].TextContent);
+                matchInfo.Match.Command1.Goal = int.Parse( document.QuerySelectorAll(".scoreboard")[0].TextContent);
+                matchInfo.Match.Command2.Goal = int.Parse( document.QuerySelectorAll(".scoreboard")[1].TextContent);
             }
-            matchInfo.Country = document.QuerySelector(".description__country").FirstChild.TextContent;
-            matchInfo.Liga = document.QuerySelector(".description__country>a").TextContent;
+            matchInfo.Match.Country = document.QuerySelector(".description__country").FirstChild.TextContent.Replace(": ", "");
+            matchInfo.Match.Liga = document.QuerySelector(".description__country>a").TextContent;
+
+            var tts = document.QuerySelector("#utime").TextContent;
 
             try
             {
                 var date = DateTime.Parse(document.QuerySelector("#utime").TextContent);
-                matchInfo.DateStart = date;
+                matchInfo.Match.DateStart = date;
             }
             catch (FormatException)
             {
-                matchInfo.DateStart = null;
+                matchInfo.Match.DateStart = null;
             }
             return matchInfo;
         }
@@ -98,7 +105,7 @@ namespace MyScore.Action
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static List<AllTotalModels> MatchOverUnder(string response)
+        public static List<AllTotalModels> CoeffBM(string response)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
@@ -113,7 +120,6 @@ namespace MyScore.Action
 
                 if ( total == null ) throw new ErrorOverUnderException("Параметр total - null");
 
-                List<TotalModels> totalInfo = new List<TotalModels>();
                 foreach ( var tbody in doc.QuerySelectorAll("tbody>tr") )
                 {
                     string bkName = tbody.QuerySelector("td.bookmaker>div>a").GetAttribute("title");
@@ -123,24 +129,54 @@ namespace MyScore.Action
                     if ( more == null  ) throw new ErrorOverUnderException("Параметр more - null");
                     if ( less == null ) throw new ErrorOverUnderException("Параметр less - null");
 
-                    totalInfo.Add(new TotalModels()
+                    allTotal.Add(new AllTotalModels()
                     {
+                        Total = double.Parse(total),
                         BkName = bkName,
                         More = double.Parse(more == "-" ? "0" : more),
                         Less = double.Parse(less == "-" ? "0" : less),
                     });
 
                 }
-
-                allTotal.Add(new AllTotalModels()
-                {
-                    Total = double.Parse(total),
-                    Info= totalInfo,
-                });
             }
 
             return allTotal;
         }
+
+        public static List<AllTotalModels> CoeffFDS(string response)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
+            List<AllTotalModels> allTotal = new List<AllTotalModels>();
+
+            HtmlParser hp = new HtmlParser();
+            var document = hp.Parse(response);
+
+            foreach ( var tbody in document.QuerySelectorAll("#block-1x2>#block-1x2-ft>#odds_1x2>tbody>tr") )
+            {
+                string bkName = tbody.QuerySelector("td.bookmaker>div>a").GetAttribute("title");
+
+                string first = tbody.QuerySelectorAll("td.kx")[0].QuerySelector("span").TextContent;
+                string two = tbody.QuerySelectorAll("td.kx")[1].QuerySelector("span").TextContent;
+                string x = tbody.QuerySelectorAll("td.kx")[2].QuerySelector("span").TextContent;
+
+                if ( first == null ) throw new ErrorOverUnderException("Параметр first - null");
+                if ( two == null ) throw new ErrorOverUnderException("Параметр two - null");
+                if ( x == null ) throw new ErrorOverUnderException("Параметр x - null");
+
+                allTotal.Add(new AllTotalModels()
+                {
+                    BkName = bkName,
+                    First = double.Parse(first == "-" ? "0" : first),
+                    Two = double.Parse(two == "-" ? "0" : two),
+                    X = double.Parse(x == "-" ? "0" : x),
+
+                });
+
+            }
+            return allTotal;
+        }
+
 
         /// <summary>
         /// Получить информацию о голах матчей
@@ -158,11 +194,11 @@ namespace MyScore.Action
 
             foreach ( var overall in document.QuerySelectorAll("#tab-h2h-overall>.h2h-wrapper>table") )
             {
-                var lastGame = new InfoGameModels();
+                var lastGame = new H2HTotalModels();
                 var h2hMatch = new H2HMatchModels();
 
                 var name = overall.QuerySelector("thead>tr>td").TextContent.Split(':');
-                lastGame.Name = string.Join(" ",name.Skip(1));
+                lastGame.Name = string.Join(" ",name.Skip(1)).TrimStart();
                 lastGame.Match = new List<H2HMatchModels>();
 
                 foreach ( var matchInfo in overall.QuerySelectorAll("tbody>tr") )

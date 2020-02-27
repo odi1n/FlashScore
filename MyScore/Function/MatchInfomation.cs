@@ -1,6 +1,8 @@
 ﻿using Flurl.Http;
 using MyScore.Action;
 using MyScore.Models;
+using MyScore.Models.Coefficient;
+using MyScore.Models.H2H;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,8 +46,6 @@ namespace MyScore.Function
         /// <returns></returns>
         public async Task<MatchModels> GetMatchInfoAsync(MatchModels match)
         {
-            //await ParsingXFSignAsync();
-
             FlurlClient client = new FlurlClient();
 
             client.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
@@ -65,10 +65,8 @@ namespace MyScore.Function
         /// </summary>
         /// <param name="match">Матч о котором нужно получить информацию</param>
         /// <returns></returns>
-        public async Task<List<AllTotalModels>> GetMatchOverUnderAsync(MatchModels match)
+        public async Task<string> GetPageCoefficient(MatchModels match)
         {
-            //await ParsingXFSignAsync();
-
             FlurlClient client = new FlurlClient();
 
             client.Headers.Add("Accept", "*/*");
@@ -76,12 +74,11 @@ namespace MyScore.Function
             client.Headers.Add("x-fsign", _xFSign);
             client.Headers.Add("accept-language", "*");
             client.Headers.Add("x-requested-with", "XMLHttpRequest");
-            client.Headers.Add("x-referer", "https://www.myscore.com.ua/match/" + match.MatchId+ "/#odds-comparison;over-under;full-time");
+            client.Headers.Add("x-referer", "https://www.myscore.com.ua/match/" + match.Id+ "/#odds-comparison;over-under;full-time");
             client.Headers.Add("accept-encoding", "gzip, deflate, br");
 
-            string response = await client.Request("https://d.myscore.com.ua/x/feed/"+ "d_od_" + match.MatchId + "_ru_1_eu").GetStringAsync();
-            var info = Parsing.MatchOverUnder(response.ToString());
-            return info;
+            string response = await client.Request("https://d.myscore.com.ua/x/feed/"+ "d_od_" + match.Id + "_ru_1_eu").GetStringAsync();
+            return response;
         }
 
         /// <summary>
@@ -94,14 +91,13 @@ namespace MyScore.Function
             FlurlClient client = new FlurlClient();
 
             client.Headers.Add("Accept", "*/*");
-            //client.Headers.Add("x-geoip", "1");
             client.Headers.Add("x-fsign", _xFSign);
             client.Headers.Add("accept-language", "*");
             client.Headers.Add("x-requested-with", "XMLHttpRequest");
-            client.Headers.Add("x-referer", "https://www.myscore.com.ua/match/" + match.MatchId + "/#odds-comparison;over-under;full-time");
+            client.Headers.Add("x-referer", "https://www.myscore.com.ua/match/" + match.Id + "/#odds-comparison;over-under;full-time");
             client.Headers.Add("accept-encoding", "gzip, deflate, br");
 
-            string response = await client.Request("https://d.myscore.com.ua/x/feed/" + "d_hh_" + match.MatchId + "_ru_1_eu").GetStringAsync();
+            string response = await client.Request("https://d.myscore.com.ua/x/feed/" + "d_hh_" + match.Id + "_ru_1_eu").GetStringAsync();
             var info = Parsing.H2HInfo(response.ToString());
             return info;
         }

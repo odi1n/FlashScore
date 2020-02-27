@@ -4,14 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyScore.Models
+namespace MyScore.Models.Coefficient
 {
-    public class TotalModels
+    public class AllTotalModels
     {
         /// <summary>
         /// Название БК конторы
         /// </summary>
         public string BkName { get; set; }
+        /// <summary>
+        /// Тотал команды
+        /// </summary>
+        public double? Total { get; set; }
         /// <summary>
         /// Больше
         /// </summary>
@@ -20,5 +24,17 @@ namespace MyScore.Models
         /// Меньше
         /// </summary>
         public double? Less { get; set; }
+        /// <summary>
+        /// 1
+        /// </summary>
+        public double? First { get; set; }
+        /// <summary>
+        /// X
+        /// </summary>
+        public double? X { get; set; }
+        /// <summary>
+        /// 2
+        /// </summary>
+        public double? Two { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿using MyScore.Function;
+﻿using MyScore.Action;
+using MyScore.Function;
+using MyScore.Models.Coefficient;
+using MyScore.Models.H2H;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +18,9 @@ namespace MyScore.Models
         /// </summary>
         public string Link { get; set; }
         /// <summary>
-        /// Id матча текущего
+        /// Id текущего матча
         /// </summary>
-        public string MatchId {
+        public string Id {
             get
             {
                 string id = Regex.Match(Link, "match/(.*?)/").Groups[1].Value;
@@ -25,89 +28,72 @@ namespace MyScore.Models
             }
         }
         /// <summary>
-        /// Время начала матча
+        /// Информация о матче
         /// </summary>
-        public DateTime? DateStart { get; set; }
+        public MatchInfoModels Match { get; set; } = new MatchInfoModels();
         /// <summary>
-        /// Имя команд
+        /// Вкладка коэфициенты
         /// </summary>
-        public string Name { get
-            {
-                return Command1.Name + " - " + Command2.Name;
-            }
-        }
-        /// <summary>
-        /// Команда 1
-        /// </summary>
-        public CommandModels Command1 { get; set; } = new CommandModels();
-        /// <summary>
-        /// Команда 2
-        /// </summary>
-        public CommandModels Command2 { get; set; } = new CommandModels();
-        /// <summary>
-        /// Лига
-        /// </summary>
-        public string Liga { get; set; }
-        /// <summary>
-        /// Страна
-        /// </summary>
-        public string Country { get; set; }
-        /// <summary>
-        /// Букмейкерская контора
-        /// </summary>
-        public List<AllTotalModels> Bookmaker { get; set; }
+        public CoefficientsModels Coefficient { get; set; }
         /// <summary>
         /// Информация о голах команд
         /// </summary>
         public H2HModels H2H { get; set; }
 
         /// <summary>
-        /// Получить информацию о матче полностью
+        /// Получить всю информацию
         /// </summary>
         /// <param name="match">Матч</param>
         /// <returns></returns>
-        public async Task<MatchModels> GetInfoAsync(bool info = true, bool overUnder = true,bool h2h = false)
+        public async Task<MatchModels> GetAllInfoAsync(bool info = true, bool fds = true, bool bm = true, bool h2h = false)
         {
-            MatchInfomation matchInfos = new MatchInfomation();
-            MatchModels matchModels = this;
-
             if ( info )
-            {
-                var getMatchInfo = await matchInfos.GetMatchInfoAsync(this);
-                matchModels.Command1 = getMatchInfo.Command1;
-                matchModels.Command2 = getMatchInfo.Command2;
-                matchModels.Country = getMatchInfo.Country;
-                matchModels.Liga = getMatchInfo.Liga;
-            }
+                await GetMatchInfoAsync();
 
-            if ( overUnder )
-            {
-                var getOverUnder = await matchInfos.GetMatchOverUnderAsync(this);
-                matchModels.Bookmaker = getOverUnder;
-            }
+            if ( fds || bm )
+                await GetPageCoefficient();
 
             if ( h2h )
-            {
-                var getH2H = await matchInfos.GetH2H(this);
-                matchModels.H2H = getH2H;
-            }
+                await GetH2HAsync();
 
-            return matchModels;
+            return this;
+        }
+
+        /// <summary>
+        /// Получить информацию о матче
+        /// </summary>
+        /// <returns></returns>
+        public async Task<MatchModels> GetMatchInfoAsync()
+        {
+            var getMatchInfo = await new MatchInfomation().GetMatchInfoAsync(this);
+            if ( getMatchInfo.Match.DateStart == null )
+                getMatchInfo.Match.DateStart = this.Match.DateStart;
+            this.Match = getMatchInfo.Match;
+            return getMatchInfo;
         }
 
         /// <summary>
         /// Получить более менее команд
         /// </summary>
         /// <returns></returns>
-        public async Task<MatchModels> GetOverUnderAsync()
+        public async Task<MatchModels> GetPageCoefficient(bool fds = true, bool bm = true)
         {
-            MatchInfomation matchInfos = new MatchInfomation();
-            MatchModels matchModels = this;
+            List<AllTotalModels> coeffBM = null;
+            List<AllTotalModels> coeffFDS = null;
 
-            var getOverUnder = await matchInfos.GetMatchOverUnderAsync(this);
-            matchModels.Bookmaker = getOverUnder;
+            var coeffPage = await new MatchInfomation().GetPageCoefficient(this);
+           
+            if (fds )
+                coeffFDS = Parsing.CoeffFDS(coeffPage); 
+            if ( bm )
+                coeffBM = Parsing.CoeffBM(coeffPage);
 
-            return matchModels;
+            this.Coefficient = new CoefficientsModels()
+            {
+                BM = coeffBM,
+                FDS = coeffFDS,
+            };
+            return this;
         }
 
         /// <summary>
@@ -116,13 +102,9 @@ namespace MyScore.Models
         /// <returns></returns>
         public async Task<MatchModels> GetH2HAsync()
         {
-            MatchInfomation matchInfos = new MatchInfomation();
-            MatchModels matchModels = this;
-
-            var getH2H = await matchInfos.GetH2H(this);
-            matchModels.H2H = getH2H;
-
-            return matchModels;
+            var getH2H = await new MatchInfomation().GetH2H(this);
+            this.H2H = getH2H;
+            return this;
         }
     }
 }

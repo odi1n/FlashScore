@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyScore.Models
+namespace MyScore.Models.H2H
 {
     public class H2HMatchModels
     {
