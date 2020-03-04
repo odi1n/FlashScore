@@ -11,7 +11,7 @@
 7. [Библиотеки](#библиотеки)
 
 Получить можно следующую информацию:
-- [x] Информация о матче
+- [x] Информация о матче(лига, страна, команды, голы, начало)
 - [x] H2H
 - [x] 1X2
 - [x] БМ
@@ -82,30 +82,30 @@ public static List<MatchModels> GetNearest( int minutes = 60);//На сколь�
 ### Пример. Вывод матчей в консоль
 ```C#
 async static void  Test()
-        {
-            MyScoreApi myScore = new MyScoreApi();
-            var matches = await myScore.GetAllMatchesAsync();
-            var info = await  matches.GetInfoAsync(h2h: true);
+{
+    MyScoreApi myScore = new MyScoreApi();
+    var matches = await myScore.GetAllMatchesAsync();
+    var info = await  matches.GetInfoAsync(h2h: true);
 
-            foreach ( var match in info )
-            {
-                string test = "";
+    foreach ( var match in info )
+    {
+	string test = "";
 
-                test += "name: " + match.Match.Name + "\n";
-                test += "time: " + match.Match.DateStart + "\n";
-                test += "liga: " + match.Match.Liga + "\n";
-                test += "link: " + match.Link + "\n";
+	test += "name: " + match.Match.Name + "\n";
+	test += "time: " + match.Match.DateStart + "\n";
+	test += "liga: " + match.Match.Liga + "\n";
+	test += "link: " + match.Link + "\n";
 
-                foreach ( var matchTotal in match.Coefficient.BM )
-                {
-                    test += "key:" + matchTotal.Total + "\n";
-                    test += "bk:" + matchTotal.BkName + "\n";
-                    test += "more:" + matchTotal.More + "\n";
-                    test += "less:" + matchTotal.More + "\n";
-                }
-                Console.WriteLine(test + "\n");
-            }
-        }
+	foreach ( var matchTotal in match.Coefficient.BM )
+	{
+	    test += "key:" + matchTotal.Total + "\n";
+	    test += "bk:" + matchTotal.BkName + "\n";
+	    test += "more:" + matchTotal.More + "\n";
+	    test += "less:" + matchTotal.More + "\n";
+	}
+	Console.WriteLine(test + "\n");
+    }
+}
 ```
 
 Все методы асинхронные. Время получения матчей и информации о всех матчах зависит от количества матчей в день.
