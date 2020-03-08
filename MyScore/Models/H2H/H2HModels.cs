@@ -20,5 +20,14 @@ namespace MyScore.Models.H2H
         /// Очные ставки
         /// </summary>
         public H2HTotalModels Confrontation { get; set; }
+
+        public override string ToString()
+        {
+            return new StringBuilder().AppendFormat("{0}", "H2H")
+                .AppendFormat(" : LastGameCommand1='{0}'", LastGameCommand1)
+                .AppendFormat(" : LastGameCommand2='{0}'", LastGameCommand2)
+                .AppendFormat(" : Confrontation='{0}'", Confrontation)
+                .ToString();
+        }
     }
 }

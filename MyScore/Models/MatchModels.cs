@@ -4,6 +4,7 @@ using MyScore.Models.Coefficient;
 using MyScore.Models.H2H;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -66,10 +67,13 @@ namespace MyScore.Models
         public async Task<MatchModels> GetMatchInfoAsync()
         {
             var getMatchInfo = await new MatchInfomation().GetMatchInfoAsync(this);
+
             if ( getMatchInfo.Match.DateStart == null )
                 getMatchInfo.Match.DateStart = this.Match.DateStart;
+
             this.Match = getMatchInfo.Match;
-            return getMatchInfo;
+
+            return this;
         }
 
         /// <summary>
@@ -93,6 +97,7 @@ namespace MyScore.Models
                 BM = coeffBM,
                 FDS = coeffFDS,
             };
+
             return this;
         }
 
@@ -103,7 +108,9 @@ namespace MyScore.Models
         public async Task<MatchModels> GetH2HAsync()
         {
             var getH2H = await new MatchInfomation().GetH2H(this);
+
             this.H2H = getH2H;
+
             return this;
         }
     }

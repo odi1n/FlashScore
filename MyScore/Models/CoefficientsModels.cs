@@ -17,5 +17,13 @@ namespace MyScore.Models
         /// 1X2 - основное время
         /// </summary>
         public List<AllTotalModels> FDS { get; set; }
+
+        public override string ToString()
+        {
+            return new StringBuilder().AppendFormat("{0}", "Ceff")
+                .AppendFormat(" : BM={0}", BM.Count)
+                .AppendFormat(" : FDS={0}", FDS.Count)
+                .ToString();
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace MyScore
             {
                 i++;
                 await match.GetAllInfoAsync(info,fds,bm, h2h);
-                Console.WriteLine($"INFO - count={MatchesToday.Count}, current={i}, lige={match.Match.Liga} match=\"{match.Match.Name}\", start = {match.Match.DateStart.Value.ToString("f", CultureInfo.GetCultureInfo("ru-ru"))}");
+                Console.WriteLine($"INFO - Count={MatchesToday.Count} : Current={i} : {match.Match}");
             }
             return MatchesToday;
         }
@@ -51,7 +51,7 @@ namespace MyScore
             {
                 i++;
                 await match.GetPageCoefficient();
-                Console.WriteLine($"OVER-UNDER - count={MatchesToday.Count}, current={i}, bool={match.Coefficient.BM.Count}");
+                Console.WriteLine($"OVER-UNDER - Count={MatchesToday.Count} : Current={i} : {match.Coefficient}");
             }
             return MatchesToday;
         }
@@ -69,7 +69,7 @@ namespace MyScore
             {
                 i++;
                 await match.GetH2HAsync();
-                Console.WriteLine($"H2H - count={MatchesToday.Count}, current={i}, name={match.H2H.Confrontation.Name}, comm1 = {match.H2H.LastGameCommand1.Match.Count}, comm2 = {match.H2H.LastGameCommand2.Match.Count}, conf = {match.H2H.Confrontation.Match.Count}");
+                Console.WriteLine($"H2H - Count={MatchesToday.Count} : Current={i} : {match.H2H.ToString()}");
             }
             return MatchesToday;
         }

@@ -16,5 +16,13 @@ namespace MyScore.Models.H2H
         /// Матчи команды
         /// </summary>
         public List<H2HMatchModels> Match { get; set; }
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .AppendFormat("Name={0}", Name)
+                .AppendFormat(" : Match={0}", Match.Count)
+                .ToString();
+        }
     }
 }

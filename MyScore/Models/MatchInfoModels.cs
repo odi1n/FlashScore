@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,14 @@ namespace MyScore.Models
 {
     public class MatchInfoModels
     {
+        /// <summary>
+        /// Страна
+        /// </summary>
+        public string Country { get; set; }
+        /// <summary>
+        /// Лига
+        /// </summary>
+        public string Liga { get; set; }
         /// <summary>
         /// Имя команд
         /// </summary>
@@ -19,6 +28,10 @@ namespace MyScore.Models
             }
         }
         /// <summary>
+        /// Время начала матча
+        /// </summary>
+        public DateTime? DateStart { get; set; }
+        /// <summary>
         /// Команда 1
         /// </summary>
         public CommandModels Command1 { get; set; } = new CommandModels();
@@ -26,17 +39,17 @@ namespace MyScore.Models
         /// Команда 2
         /// </summary>
         public CommandModels Command2 { get; set; } = new CommandModels();
-        /// <summary>
-        /// Лига
-        /// </summary>
-        public string Liga { get; set; }
-        /// <summary>
-        /// Страна
-        /// </summary>
-        public string Country { get; set; }
-        /// <summary>
-        /// Время начала матча
-        /// </summary>
-        public DateTime? DateStart { get; set; }
+
+        public override string ToString()
+        {
+            return new StringBuilder().AppendFormat("{0}", "Match")
+                .AppendFormat(" : Country={0}", Country)
+                .AppendFormat(" : Liga={0}", Liga)
+                .AppendFormat(" : Match={0}", Name)
+                .AppendFormat(" : Date={0}", DateStart.Value.ToString("f", CultureInfo.GetCultureInfo("ru-ru")))
+                .AppendFormat(" : Command1='{0}'", Command1)
+                .AppendFormat(" : Command2='{0}'", Command2)
+                .ToString();
+        }
     }
 }

@@ -16,5 +16,13 @@ namespace MyScore.Models.H2H
         /// Информация о второй команде
         /// </summary>
         public CommandModels Command2 { get; set; }
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .AppendFormat(" : Command1='{0}'", Command1)
+                .AppendFormat(" : Command2='{0}'", Command2)
+                .ToString();
+        }
     }
 }
