@@ -1,125 +1,115 @@
 # MyScore (библиотека помогает получить матчи с сервиса)
 
-Бибилотека предназначена для получения матчей с сервиса и получением статистики о них.
+Бибилотека предназначена для получения матчей с сервиса MyScore и получением статистики о них.
 
-Подключить 
+## Меню
+1. [Подключение](#подключение)
+2. [Получить все матчи](#получить-все-матчи)
+3. [Получение информации о всех матчах](#получение-информации-о-всех-матчах)
+4. [Получение об одном матче](#получение-об-одном-матче)
+7. [Пример](#пример)
+7. [Библиотеки](#библиотеки)
+
+## Получить можно следующую информацию:
+- [x] Информация о матче(лига, страна, команды, голы, начало)
+- [x] H2H
+- [x] 1X2
+- [x] БМ
+
+### Подключение
 ```C#
-using MyScoreApi;
+using MyScore;
 ```
 
-Для получения всех матчей на следующий день
+### Получить все Матчи
 ```C#
-MyScore myScore = new MyScore();
-var ss = await myScore.GetMatches(true);//Получить все матчи на следующий день
-var infos = await ss.GetInfo();//Получить всю информацию о матче
-```
-Для получение матчей за определенную промежуток времени на текущий день
-```C#
-MyScore myScore = new MyScore();
-var matches = await myScore.GetMatches();//Получить на текущий день
-var info = await matches.GetNearest(DateTime.Now.AddHours(4)).GetInfo();//Получить на 4 часа от текущего времени, информацию об этих матчах
+MyScoreApi myScore = new MyScoreApi();
+var matches = await myScore.GetAllMatchesAsync(); //Получить матчи на текущий день
+var matches = await myScore.GetAllMatchesAsync(true); //Получить матчи на следующий день
 ```
 
-Можем получить информацию  на перед в нескольи вариантах
+### Получение информации о всех матчах
+Мы можем получить информацию о всех матчах одним методом
 ```C#
-public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, DateTime end);//На сколько часов вперед
-public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, DateTime start, DateTime end);//Со скольки и до
-public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, NearestMatchesModels nearestMatche);//Модель в которой указываем по желанию часы/минуты
-public static List<MatchModels> GetNearest(this List<MatchModels> MatchesToday, int minutes = 60);//На сколько минут вперед
+ public static async Task<List<MatchModels>> GetInfoAsync(this List<MatchModels> MatchesToday, bool info = true, bool fds = true, bool bm = true,bool h2h = false)
 ```
 
-Готовый пример
+По умолчанию мы получаем информацию:1х2, БМ. Так же можем указать нужные нам параметр
 ```C#
-private async static void  Test()
+var infoMatch = matches.GetInfoAsync(info: false, fds: false, bm: true, h2h: true);
+```
+
+Имеются так же следующие методы которыми можем получить информацию об определенных параметрах
+```c#
+var infoMatch = matches.GetH2H();//Получаем h2h
+var infoMatch = matches.GetCoefficient(true, true);//Получаем 1x2, БМ
+```
+
+### Получение об одном матче
+Все так же как и со всей информацией
+```C#
+public async Task<MatchModels> GetAllInfoAsync(bool info = true, bool fds = true, bool bm = true, bool h2h = false)
+```
+
+По умолчанию получаем все те же параметры
+```C#
+var match = matches[0].GetAllInfoAsync(info: false, fds: false, bm: true, h2h: true);
+```
+
+Имеются методы для получения информации отдельно.
+```c#
+var match = matches[0].GetMatchInfoAsync();
+var match = matches[0].GetPageCoefficient(true,true);
+var match = matches[0].GetH2HAsync();
+```
+
+#### Пример
+```C#
+foreach(var match in matches )
 {
-    MyScore myScore = new MyScore();
-    var matches = await myScore.GetMatches(true);
-    var info = await matches.GetNearest(DateTime.Now.AddHours(4)).GetInfo();
+	await match.GetAllInfoAsync(true, fds:true, bm:false, h2h:true);
+}
+```
 
-    Console.Clear();
+### Матчи можем быстро отсортировать по дате исопльзуя следующие методы
+```C#
+public static List<MatchModels> GetNearest(DateTime end);//На сколько часов вперед
+public static List<MatchModels> GetNearest(DateTime start, DateTime end);//Со скольки и до
+public static List<MatchModels> GetNearest(NearestMatchesModels nearestMatche);//Модель в которой указываем по желанию часы/минуты
+public static List<MatchModels> GetNearest( int minutes = 60);//На сколько минут вперед
+```
+
+### Пример. Вывод матчей в консоль
+```C#
+async static void  Test()
+{
+    MyScoreApi myScore = new MyScoreApi();
+    var matches = await myScore.GetAllMatchesAsync();
+    var info = await  matches.GetInfoAsync(h2h: true);
 
     foreach ( var match in info )
     {
-        string test = "";
+	string test = "";
 
-        test += ("name: " + match.Name + "\n");
-        test += ("time: " + match.DateStart + "\n");
-        test += ("liga: " + match.Liga + "\n");
-        test += ("link: " + match.Link + "\n");
+	test += "name: " + match.Match.Name + "\n";
+	test += "time: " + match.Match.DateStart + "\n";
+	test += "liga: " + match.Match.Liga + "\n";
+	test += "link: " + match.Link + "\n";
 
-        foreach ( var matchTotal in match.Bookmaker )
-        {
-            test += ("key:" + matchTotal.Coef + "\n");
-            foreach ( var val in matchTotal.Total )
-            {
-                test += ("info: " + val.BkName + " | " + val.Less + " | " + val.More + "\n");
-            }
-        }
-        Console.WriteLine(test + "\n");
+	foreach ( var matchTotal in match.Coefficient.BM )
+	{
+	    test += "key:" + matchTotal.Total + "\n";
+	    test += "bk:" + matchTotal.BkName + "\n";
+	    test += "more:" + matchTotal.More + "\n";
+	    test += "less:" + matchTotal.More + "\n";
+	}
+	Console.WriteLine(test + "\n");
     }
 }
 ```
 
-Что получилось в итоге
-```name: Параду - Бискра
-time: 2/6/2020 7:58:51 PM
-liga: Первый дивизион - Тур 16
-link: https://...
-key:0.5
-info: 1xBet | 7.5 | 1.05
-info: bet365 | 7.5 | 1.07
-info: Winline | 6.51 | 1.05
-info: Betfair | 7 | 1.07
-key:1
-info: 1xBet | 6.15 | 1.08
-info: Parimatch | 6 | 1.11
-key:1.5
-info: 1xBet | 2.74 | 1.38
-info: bet365 | 2.75 | 1.4
-info: Winline | 2.63 | 1.4
-info: Betfair | 2.75 | 1.4
-info: Parimatch | 2.7 | 1.44
-key:1.75
-info: Winline | 2.32 | 1.51
-key:2
-info: 1xBet | 2.07 | 1.68
-info: Winline | 2.04 | 1.7
-info: Parimatch | 2 | 1.75
-key:2.25
-info: Winline | 1.74 | 1.98
-info: Parimatch | 1.72 | 2.05
-key:2.5
-info: 1xBet | 1.6 | 2.34
-info: bet365 | 1.61 | 2.25
-info: Winline | 1.52 | 2.3
-info: Betfair | 1.53 | 2.45
-info: Parimatch | 1.57 | 2.35
-key:2.75
-info: Winline | 1.39 | 2.67
-key:3
-info: 1xBet | 1.27 | 3.38
-info: Parimatch | 1.27 | 3.6
-key:3.5
-info: 1xBet | 1.18 | 4.12
-info: bet365 | 1.2 | 4.33
-info: Winline | 1.15 | 4.19
-info: Betfair | 1.17 | 4.5
-info: Parimatch | 1.18 | 4.3
-key:4
-info: 1xBet | 1.05 | 7.5
-key:4.5
-info: 1xBet | 1.03 | 9
-info: bet365 | 1.07 | 7.5
-info: Winline | 1.04 | 7.67
-info: Betfair | 1.04 | 9.5
-key:5.5
-info: 1xBet | 1.02 | 15
-info: bet365 | 1.01 | 12
-info: Winline | 1.01 | 11
-info: Betfair | 1.01 | 15
-```
 Все методы асинхронные. Время получения матчей и информации о всех матчах зависит от количества матчей в день.
 
-### Используются библиотеки:
+### Библиотеки:
 1. Flurl, Flurl.http - запросы
 2. Anglesharp - парсинг
