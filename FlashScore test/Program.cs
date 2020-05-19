@@ -17,13 +17,13 @@ namespace FlashScore_test
             Console.ReadKey();
         }
 
-        async static void  Test()
+        async static void Test()
         {
             FlashScoreApi FlashScore = new FlashScoreApi();
             var matches = await FlashScore.GetAllMatchesAsync();
-            var info = await  matches.GetInfoAsync();
+            var info = await matches.GetInfoAsync();
 
-            foreach ( var match in info )
+            foreach (var match in info)
             {
                 string test = "";
 
@@ -32,7 +32,7 @@ namespace FlashScore_test
                 test += "liga: " + match.Match.Liga + "\n";
                 test += "link: " + match.Link + "\n";
 
-                foreach ( var matchTotal in match.Coefficient.BM )
+                foreach (var matchTotal in match.Coefficient.BM)
                 {
                     test += "key:" + matchTotal.Total + "\n";
                     test += "bk:" + matchTotal.BkName + "\n";
