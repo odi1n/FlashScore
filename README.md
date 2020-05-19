@@ -1,4 +1,4 @@
-# MyScore (библиотека помогает получить матчи с сервиса)
+# FlashScore (библиотека помогает получить матчи с сервиса)
 
 Бибилотека предназначена для получения матчей с сервиса MyScore и получением статистики о них.
 
@@ -23,9 +23,9 @@ using MyScore;
 
 ### Получить все Матчи
 ```C#
-MyScoreApi myScore = new MyScoreApi();
-var matches = await myScore.GetAllMatchesAsync(); //Получить матчи на текущий день
-var matches = await myScore.GetAllMatchesAsync(true); //Получить матчи на следующий день
+FlashScoreApi flashScore = new FlashScoreApi();
+var matches = await flashScore.GetAllMatchesAsync(); //Получить матчи на текущий день
+var matches = await flashScore.GetAllMatchesAsync(true); //Получить матчи на следующий день
 ```
 
 ### Получение информации о всех матчах
