@@ -18,7 +18,7 @@
 
 ### Подключение
 ```C#
-using MyScore;
+using FlashScore;
 ```
 
 ### Получить все Матчи
