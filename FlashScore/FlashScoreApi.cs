@@ -34,7 +34,7 @@ namespace FlashScore
         /// </summary>
         /// <param name="newInfo">false - сегодня, true - завтра</param>
         /// <returns></returns>
-        public async Task<List<MatchModels>> GetAllMatchesAsync(bool newInfo = false)
+        public async Task<List<MatchModels>> GetAllMatchesAsync(bool newInfo = false, bool addOneHour = false)
         {
             NewInfo = newInfo;
 
@@ -48,11 +48,11 @@ namespace FlashScore
 
             string response = null;
             if ( newInfo )
-                response = await client.Request("https://m.FlashScore.com.ua/" + "?d=1").GetStringAsync();
+                response = await client.Request("https://m.flashscore.com.ua/" + "?d=1").GetStringAsync();
             else
-                response = await client.Request("https://m.FlashScore.com.ua/").GetStringAsync();
+                response = await client.Request("https://m.flashscore.com.ua/").GetStringAsync();
 
-            Matches = Parsing.MFlashScore(response).ToList();
+            Matches = Parsing.MFlashScore(response, addOneHour).ToList();
             return Matches;
         }
     }

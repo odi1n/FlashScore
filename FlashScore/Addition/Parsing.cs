@@ -19,7 +19,7 @@ namespace FlashScore.Action
         /// </summary>
         /// <param name="response">строка для парсинга</param>
         /// <returns></returns>
-        public static List<MatchModels> MFlashScore(string response)
+        public static List<MatchModels> MFlashScore(string response, bool addOneHour = false)
         {
             List<MatchModels> mim = new List<MatchModels>();
             int number = 0;
@@ -40,21 +40,23 @@ namespace FlashScore.Action
 
                 DateTime? time;
 
-                if ( timePars.Contains(":") )
-                    time = DateTime.Parse(timePars).AddHours(1);
+                if (timePars.Contains(":"))
+                {
+                    if (addOneHour)
+                        time = DateTime.Parse(timePars).AddHours(1);
+                    else
+                        time = DateTime.Parse(timePars);
+                }
                 else
                 {
                     int checkNumb = 0;
                     try { checkNumb = int.Parse(timePars); } catch { }
 
-                    if ( checkNumb == 0 )
+                    if (checkNumb == 0)
                         time = DateTime.Now.AddMinutes(-45);
                     else
                         time = DateTime.Now.AddMinutes(-Convert.ToInt32(timePars));
                 }
-
-                if ( FlashScoreApi.NewInfo )
-                    time =time.Value.AddDays(1);
 
                 mim[number].Match.DateStart = time;
                 number++;
