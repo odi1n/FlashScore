@@ -58,12 +58,26 @@ namespace FlashScore.Action
                         time = DateTime.Now.AddMinutes(-Convert.ToInt32(timePars));
                 }
 
+                if (FlashScoreApi.NewInfo == Enums.DayInfo.Tomorrow)
+                    time = time.Value.AddDays(1);
+                else if (FlashScoreApi.NewInfo == Enums.DayInfo.Yesterday)
+                    time = time.Value.AddDays(-1);
+
                 mim[number].Match.DateStart = time;
                 number++;
             }
 
             return mim;
         }
+
+        private const string None = "";
+        private const string Completed = "Завершен";
+        private const string Canceled = "Отменен";
+        private const string Absence = "Неявка";
+        private const string SeriesOfPinal = "После серии пенальти";
+        private const string Moved = "Перенесен";
+        private const string TechDefeat = "Тех. поражение";
+        private const string AfterExtraTime = "После дополнительного времени";
 
         /// <summary>
         /// Спарсить информацию о матчей
@@ -72,6 +86,7 @@ namespace FlashScore.Action
         /// <returns></returns>
         public static MatchModels MatchInfo(string response)
         {
+
             MatchModels matchInfo = new MatchModels();
 
             HtmlParser hp = new HtmlParser();
@@ -99,6 +114,17 @@ namespace FlashScore.Action
             {
                 matchInfo.Match.DateStart = null;
             }
+
+            var resultMatch = document.QuerySelector(".info-status.mstat").TextContent.Trim();
+            if (resultMatch == None) matchInfo.Result = Enums.ResultMatch.None;
+            if (resultMatch == Completed) matchInfo.Result = Enums.ResultMatch.Completed;
+            if (resultMatch == Canceled) matchInfo.Result = Enums.ResultMatch.Calceled;
+            if (resultMatch == Absence) matchInfo.Result = Enums.ResultMatch.Absence;
+            if (resultMatch == SeriesOfPinal) matchInfo.Result = Enums.ResultMatch.SeriesOfPinal;
+            if (resultMatch == Moved) matchInfo.Result = Enums.ResultMatch.Moved;
+            if (resultMatch == TechDefeat) matchInfo.Result = Enums.ResultMatch.TechDefeat;
+            if (resultMatch == AfterExtraTime) matchInfo.Result = Enums.ResultMatch.AfterExtraTime;
+
             return matchInfo;
         }
 

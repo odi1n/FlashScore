@@ -1,4 +1,5 @@
 ﻿using FlashScore.Action;
+using FlashScore.Enums;
 using FlashScore.Function;
 using FlashScore.Models.Coefficient;
 using FlashScore.Models.H2H;
@@ -21,13 +22,15 @@ namespace FlashScore.Models
         /// <summary>
         /// Id текущего матча
         /// </summary>
-        public string Id {
-            get
-            {
-                string id = Regex.Match(Link, "match/(.*?)/").Groups[1].Value;
-                return id;
-            }
-        }
+        public string Id {get{return Regex.Match(Link, "match/(.*?)/").Groups[1].Value;} }
+        /// <summary>
+        /// Формула
+        /// </summary>
+        public double Formula { get; set; }
+        /// <summary>
+        /// Результаты матча
+        /// </summary>
+        public ResultMatch Result { get; set; } = ResultMatch.None;
         /// <summary>
         /// Информация о матче
         /// </summary>
@@ -52,7 +55,7 @@ namespace FlashScore.Models
                 await GetMatchInfoAsync();
 
             if ( fds || bm )
-                await GetPageCoefficient();
+                await GetPageCoefficient(fds, bm);
 
             if ( h2h )
                 await GetH2HAsync();
@@ -72,6 +75,7 @@ namespace FlashScore.Models
                 getMatchInfo.Match.DateStart = this.Match.DateStart;
 
             this.Match = getMatchInfo.Match;
+            this.Result = getMatchInfo.Result;
 
             return this;
         }
@@ -82,8 +86,7 @@ namespace FlashScore.Models
         /// <returns></returns>
         public async Task<MatchModels> GetPageCoefficient(bool fds = true, bool bm = true)
         {
-            List<AllTotalModels> coeffBM = null;
-            List<AllTotalModels> coeffFDS = null;
+            List<AllTotalModels> coeffBM = null, coeffFDS = null;
 
             var coeffPage = await new MatchInfomation().GetPageCoefficient(this);
            

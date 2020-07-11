@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Addition\Parsing.cs" />
     <Compile Include="Addition\TimeAddition.cs" />
+    <Compile Include="Enums\DayInfo.cs" />
+    <Compile Include="Enums\ResultMatch.cs" />
     <Compile Include="Exception\ErrorOverUnderException.cs" />
     <Compile Include="Exception\ErrorNearestMatchesException.cs" />
     <Compile Include="Exception\ErrorMatchesNullException.cs" />

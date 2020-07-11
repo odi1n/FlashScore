@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
 using FlashScore.Function;
+using FlashScore.Enums;
 
 namespace FlashScore
 {
@@ -22,7 +23,7 @@ namespace FlashScore
         /// <summary>
         /// Новые матчи
         /// </summary>
-        public static bool NewInfo { get; set; }
+        public static DayInfo NewInfo { get; set; }
 
         public FlashScoreApi()
         {
@@ -32,9 +33,9 @@ namespace FlashScore
         /// <summary>
         /// Получить матчи с m.FlashScore.com.ua
         /// </summary>
-        /// <param name="newInfo">false - сегодня, true - завтра</param>
+        /// <param name="newInfo">За какой временной промежуток получаем матчи. По умолчанию за сегодня</param>
         /// <returns></returns>
-        public async Task<List<MatchModels>> GetAllMatchesAsync(bool newInfo = false, bool addOneHour = false)
+        public async Task<List<MatchModels>> GetAllMatchesAsync(DayInfo newInfo = DayInfo.Today, bool addOneHour = false)
         {
             NewInfo = newInfo;
 
@@ -47,10 +48,9 @@ namespace FlashScore
             client.Headers.Add("Upgrade-Insecure-Requests", "1");
 
             string response = null;
-            if ( newInfo )
-                response = await client.Request("https://m.flashscore.com.ua/" + "?d=1").GetStringAsync();
-            else
-                response = await client.Request("https://m.flashscore.com.ua/").GetStringAsync();
+            if (newInfo == DayInfo.Tomorrow) response = await client.Request("https://m.flashscore.com.ua/" + "?d=1").GetStringAsync();
+            else if(newInfo == DayInfo.Today)response = await client.Request("https://m.flashscore.com.ua/").GetStringAsync();
+            else if(newInfo == DayInfo.Yesterday) response = await client.Request("https://m.flashscore.com.ua/" + "?d=-1").GetStringAsync();
 
             Matches = Parsing.MFlashScore(response, addOneHour).ToList();
             return Matches;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlashScore;
 using System.IO;
+using FlashScore.Enums;
 
 namespace FlashScore_test
 {
@@ -20,7 +21,7 @@ namespace FlashScore_test
         async static void Test()
         {
             FlashScoreApi FlashScore = new FlashScoreApi();
-            var matches = await FlashScore.GetAllMatchesAsync(true);
+            var matches = await FlashScore.GetAllMatchesAsync(DayInfo.Today);
             var info = await matches.GetInfoAsync(true, true, true, true);
             foreach (var match in info)
             {
